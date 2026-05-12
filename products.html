@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>产品中心 - Voltix · 伏特前行</title>
+  <link rel="stylesheet" href="style.css?v=1.5.0">
+  <script src="https://static.cloudbase.net/js-sdk/latest/cloudbase.full.js"></script>
+  <script src="cloudbase-init.js?v=1.3.0"></script>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <style>
+    /* 商品图缩略图 */
+    .product-thumbs {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .thumb {
+      width: 64px;
+      height: 72px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: white;
+      padding: 4px;
+      box-sizing: border-box;
+    }
+    .thumb:hover {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+    .thumb.active {
+      border-color: #10b981;
+      background: #d1fae5;
+    }
+    .thumb svg {
+      width: 48px;
+      height: 64px;
+    }
+    .thumb span {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+    .product-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;">
+        <img src="logo.svg" alt="Voltix" style="height:36px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));">
+        <span style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:1px;">Voltix · 伏特前行</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="products.html" class="nav-link active">产品中心</a>
+        <a href="about.html" class="nav-link">关于我们</a>
+        <a href="partnership.html" class="nav-link">合作申请</a>
+        <a href="contact.html" class="nav-link">联系我们</a>
+      </div>
+      <div class="nav-user" id="navUser">
+        <a href="login.html" class="nav-link">登录</a>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">首页</a>
+      <a href="products.html">产品中心</a>
+      <a href="about.html">关于我们</a>
+      <a href="partnership.html">合作申请</a>
+      <a href="contact.html">联系我们</a>
+      <a href="login.html" id="mobileLoginLink">登录</a>
+    </div>
+  </nav>
+
+  <!-- 页面顶部 -->
+  <section class="page-hero">
+    <h1>产品中心</h1>
+    <p>创新科技，为未来充电</p>
+  </section>
+
+  <!-- 产品1：智能充电桩 -->
+  <section class="product-detail-section" id="charger">
+    <div class="product-detail-grid">
+      <div class="product-visual">
+        <!-- 充电桩 SVG 详情图（主图容器，id用于JS切换） -->
+        <div id="mainProductImage">
+        <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;">
+          <!-- 主体外壳 -->
+          <rect x="70" y="40" width="160" height="280" rx="20" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+          <rect x="70" y="40" width="160" height="60" rx="20" fill="#0f172a"/>
+          <rect x="70" y="80" width="160" height="30" fill="#0f172a"/>
+          <!-- 墨水屏 -->
+          <rect x="90" y="110" width="120" height="80" rx="4" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+          <text x="150" y="145" text-anchor="middle" fill="#fff" font-size="14" font-family="monospace">7.0kW</text>
+          <text x="150" y="165" text-anchor="middle" fill="#10b981" font-size="12" font-family="monospace">充电中...</text>
+          <text x="150" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-family="monospace">02:34:15</text>
+          <!-- LED状态灯 -->
+          <circle cx="150" cy="65" r="8" fill="#10b981">
+            <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <!-- 品牌Logo -->
+          <circle cx="150" cy="230" r="25" fill="#0a0c20" stroke="#4338ca" stroke-width="1.5"/>
+          <text x="150" y="238" text-anchor="middle" fill="#6366f1" font-size="20" font-weight="700">V</text>
+          <!-- 充电枪线 -->
+          <path d="M 230 200 Q 280 200 280 280" fill="none" stroke="#334155" stroke-width="12" stroke-linecap="round"/>
+          <path d="M 230 200 Q 280 200 280 280" fill="none" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+          <!-- 充电枪头 -->
+          <rect x="265" y="270" width="30" height="50" rx="5" fill="#0f172a"/>
+          <rect x="270" y="275" width="20" height="30" rx="3" fill="#1e293b"/>
+          <!-- 底部接口 -->
+          <rect x="130" y="300" width="40" height="20" rx="4" fill="#334155"/>
+          <!-- 装饰线条 -->
+          <line x1="90" y1="270" x2="210" y2="270" stroke="#e2e8f0" stroke-width="1"/>
+          <line x1="90" y1="280" x2="210" y2="280" stroke="#e2e8f0" stroke-width="1"/>
+        </svg>
+        </div>
+        <!-- 缩略图行 -->
+        <div class="product-thumbs">
+          <div class="thumb active" onclick="switchProductImage(0, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"><rect x="14" y="8" width="32" height="56" rx="4" fill="#0f172a"/><rect x="18" y="22" width="24" height="16" rx="2" fill="#1a1a1a"/><circle cx="30" cy="13" r="2" fill="#10b981"/></svg>
+            <span>正面</span>
+          </div>
+          <div class="thumb" onclick="switchProductImage(1, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"><rect x="8" y="14" width="44" height="56" rx="4" fill="#0f172a" transform="rotate(-90,30,42)"/><rect x="14" y="20" width="32" height="8" rx="2" fill="#1a1a1a" transform="rotate(-90,30,42)"/><line x1="50" y1="20" x2="56" y2="20" stroke="#334155" stroke-width="3"/></svg>
+            <span>侧面</span>
+          </div>
+          <div class="thumb" onclick="switchProductImage(2, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"><rect x="14" y="8" width="32" height="56" rx="4" fill="#1e293b"/><circle cx="30" cy="46" r="18" fill="#0a0c20" stroke="#4338ca" stroke-width="1"/><text x="30" y="51" text-anchor="middle" fill="#6366f1" font-size="10" font-weight="700">V</text></svg>
+            <span>背面</span>
+          </div>
+          <div class="thumb" onclick="switchProductImage(3, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"><rect x="10" y="5" width="40" height="25" rx="4" fill="#0f172a"/><rect x="14" y="12" width="32" height="16" rx="2" fill="#1a1a1a"/><text x="30" y="24" text-anchor="middle" fill="#10b981" font-size="6">7.0kW</text></svg>
+            <span>细节</span>
+          </div>
+        </div>
+        <p style="margin-top:12px;color:#64748b;font-size:14px;">VOLTIX-7K</p>
+      </div>
+      <div class="product-info">
+        <h2>Voltix 智能充电桩</h2>
+        <p class="model">型号：VOLTIX-7K</p>
+        <div class="price" style="font-size:38px;font-weight:700;color:#10b981;margin-bottom:28px;">
+          ¥3,800 <span style="font-size:15px;font-weight:400;color:#64748b;">/台（含安装）</span>
+        </div>
+        <table class="specs-table">
+          <tr><td>功率</td><td>7kW (220V/32A)</td></tr>
+          <tr><td>充电接口</td><td>GB/T 20234.2 国标</td></tr>
+          <tr><td>显示屏幕</td><td>2.9寸电子墨水屏</td></tr>
+          <tr><td>通信方式</td><td>BLE Mesh 自组网 + WiFi</td></tr>
+          <tr><td>防护等级</td><td>IP44</td></tr>
+          <tr><td>安装方式</td><td>壁挂式（室内/地下室）</td></tr>
+          <tr><td>尺寸</td><td>220×300×120 mm</td></tr>
+          <tr><td>质保期</td><td>2年</td></tr>
+        </table>
+        <ul class="features-list">
+          <li>BLE Mesh 自组网，多桩协同工作</li>
+          <li>智能有序充电，自动调节功率</li>
+          <li>电子墨水屏，低功耗显示</li>
+          <li>支持远程监控和管理</li>
+          <li>多重安全保护机制</li>
+          <li>简约美观，适配各类场景</li>
+        </ul>
+        <a href="purchase.html?product=charger" class="btn btn-primary" style="margin-top:20px;padding:16px 48px;font-size:17px;">立即购买</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 服务内容 -->
+  <section style="background:#f8fafc;padding:80px 20px;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <h2 style="text-align:center;font-size:28px;margin-bottom:48px;">购买即享以下服务</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;">
+        <div style="text-align:center;padding:32px 20px;background:white;border-radius:16px;">
+          <div style="font-size:44px;margin-bottom:16px;">🚚</div>
+          <h4 style="margin-bottom:8px;">免费送货</h4>
+          <p style="color:#64748b;font-size:14px;">签约后7个工作日内送达安装场地</p>
+        </div>
+        <div style="text-align:center;padding:32px 20px;background:white;border-radius:16px;">
+          <div style="font-size:44px;margin-bottom:16px;">🔧</div>
+          <h4 style="margin-bottom:8px;">专业安装</h4>
+          <p style="color:#64748b;font-size:14px;">持证电工上门安装，含30米内电缆</p>
+        </div>
+        <div style="text-align:center;padding:32px 20px;background:white;border-radius:16px;">
+          <div style="font-size:44px;margin-bottom:16px;">📱</div>
+          <h4 style="margin-bottom:8px;">系统调试</h4>
+          <p style="color:#64748b;font-size:14px;">BLE Mesh组网配置，后台系统对接</p>
+        </div>
+        <div style="text-align:center;padding:32px 20px;background:white;border-radius:16px;">
+          <div style="font-size:44px;margin-bottom:16px;">🛡️</div>
+          <h4 style="margin-bottom:8px;">2年质保</h4>
+          <p style="color:#64748b;font-size:14px;">非人为损坏免费维修更换</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 产品2：自动挪车机器人 -->
+  <section class="product-detail-section" id="robot" style="background:#f8fafc;">
+    <div class="product-detail-grid">
+      <div class="product-visual" style="background:white;">
+        <!-- 挪车机器人主图容器 -->
+        <div id="mainRobotImage">
+        <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;">
+          <!-- 车身主体 -->
+          <rect x="50" y="120" width="200" height="140" rx="20" fill="#0f172a"/>
+          <rect x="60" y="130" width="180" height="120" rx="15" fill="#1e293b"/>
+          <!-- 顶部激光雷达 -->
+          <circle cx="150" cy="105" r="25" fill="#334155"/>
+          <circle cx="150" cy="105" r="18" fill="#0f172a"/>
+          <circle cx="150" cy="105" r="10" fill="#6366f1">
+            <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <!-- 雷达扫描线 -->
+          <path d="M 150 105 L 150 60" stroke="#6366f1" stroke-width="2" opacity="0.6">
+            <animateTransform attributeName="transform" type="rotate" from="0 150 105" to="360 150 105" dur="4s" repeatCount="indefinite"/>
+          </path>
+          <!-- 车轮 -->
+          <circle cx="85" cy="280" r="30" fill="#1e293b" stroke="#334155" stroke-width="3"/>
+          <circle cx="85" cy="280" r="18" fill="#475569"/>
+          <circle cx="85" cy="280" r="8" fill="#64748b"/>
+          <circle cx="215" cy="280" r="30" fill="#1e293b" stroke="#334155" stroke-width="3"/>
+          <circle cx="215" cy="280" r="18" fill="#475569"/>
+          <circle cx="215" cy="280" r="8" fill="#64748b"/>
+          <!-- 前轮（转向） -->
+          <circle cx="85" cy="100" r="25" fill="#1e293b" stroke="#334155" stroke-width="3"/>
+          <circle cx="85" cy="100" r="15" fill="#475569"/>
+          <circle cx="215" cy="100" r="25" fill="#1e293b" stroke="#334155" stroke-width="3"/>
+          <circle cx="215" cy="100" r="15" fill="#475569"/>
+          <!-- Voltix 标识（紧凑小圆） -->
+          <circle cx="150" cy="190" r="22" fill="#0a0c20" stroke="#4338ca" stroke-width="1.5"/>
+          <text x="150" y="197" text-anchor="middle" fill="#6366f1" font-size="18" font-weight="700">V</text>
+          <!-- 传感器 -->
+          <rect x="40" y="160" width="15" height="30" rx="3" fill="#334155"/>
+          <circle cx="47" cy="175" r="5" fill="#ef4444">
+            <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+          </circle>
+          <rect x="245" y="160" width="15" height="30" rx="3" fill="#334155"/>
+          <circle cx="252" cy="175" r="5" fill="#ef4444">
+            <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+          </circle>
+          <!-- 底部阴影 -->
+          <ellipse cx="150" cy="320" rx="100" ry="15" fill="#000" opacity="0.1"/>
+        </svg>
+        </div>
+        <!-- 缩略图行 -->
+        <div class="product-thumbs">
+          <div class="thumb robot-thumb active" onclick="switchRobotImage(0, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <rect x="10" y="24" width="40" height="28" rx="4" fill="#0f172a"/>
+              <circle cx="30" cy="21" r="5" fill="#334155"/>
+              <circle cx="30" cy="21" r="3" fill="#6366f1"/>
+              <circle cx="16" cy="56" r="6" fill="#1e293b"/>
+              <circle cx="44" cy="56" r="6" fill="#1e293b"/>
+            </svg>
+            <span>正面</span>
+          </div>
+          <div class="thumb robot-thumb" onclick="switchRobotImage(1, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <rect x="15" y="24" width="30" height="28" rx="4" fill="#0f172a"/>
+              <circle cx="30" cy="18" r="5" fill="#334155"/>
+              <circle cx="45" cy="38" r="5" fill="#1e293b"/>
+              <circle cx="16" cy="56" r="6" fill="#1e293b"/>
+            </svg>
+            <span>侧面</span>
+          </div>
+          <div class="thumb robot-thumb" onclick="switchRobotImage(2, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <rect x="10" y="24" width="40" height="28" rx="4" fill="#1e293b"/>
+              <circle cx="16" cy="56" r="6" fill="#1e293b"/>
+              <circle cx="44" cy="56" r="6" fill="#1e293b"/>
+              <circle cx="16" cy="38" r="3" fill="#334155"/>
+              <circle cx="44" cy="38" r="3" fill="#334155"/>
+            </svg>
+            <span>背面</span>
+          </div>
+          <div class="thumb robot-thumb" onclick="switchRobotImage(3, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <circle cx="30" cy="30" r="14" fill="#334155"/>
+              <circle cx="30" cy="30" r="9" fill="#0f172a"/>
+              <circle cx="30" cy="30" r="4" fill="#6366f1">
+                <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <path d="M 30 30 L 30 10" stroke="#6366f1" stroke-width="1.5" opacity="0.7">
+                <animateTransform attributeName="transform" type="rotate" from="0 30 30" to="360 30 30" dur="4s" repeatCount="indefinite"/>
+              </path>
+            </svg>
+            <span>雷达</span>
+          </div>
+        </div>
+        <p style="margin-top:12px;color:#64748b;font-size:14px;">VOLTIX-AUTO-01</p>
+      </div>
+      <div class="product-info">
+        <h2>Voltix 自动挪车机器人</h2>
+        <p class="model">型号：VOLTIX-AUTO-01</p>
+        <div class="price" style="font-size:38px;font-weight:700;color:#10b981;margin-bottom:28px;">
+          面议 <span style="font-size:15px;font-weight:400;color:#64748b;">/台（定制方案）</span>
+        </div>
+        <table class="specs-table">
+          <tr><td>载重能力</td><td>≤2吨</td></tr>
+          <tr><td>续航时间</td><td>8小时连续工作</td></tr>
+          <tr><td>导航方式</td><td>视觉SLAM + 激光雷达</td></tr>
+          <tr><td>定位精度</td><td>±2cm</td></tr>
+          <tr><td>通信方式</td><td>WiFi + 5G（可选）</td></tr>
+          <tr><td>充电方式</td><td>自动回充</td></tr>
+          <tr><td>适用场景</td><td>地下车库、停车场</td></tr>
+        </table>
+        <ul class="features-list">
+          <li>自动识别需要充电的车辆</li>
+          <li>精准挪车至充电车位</li>
+          <li>自动完成插枪充电</li>
+          <li>充电完成后自动挪车归还</li>
+          <li>24小时无人值守运营</li>
+          <li>与充电桩系统无缝对接</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary" style="margin-top:20px;padding:16px 48px;font-size:17px;">联系我们</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 产品3：自动充电机械臂 -->
+  <section class="product-detail-section" id="arm">
+    <div class="product-detail-grid">
+      <div class="product-visual" style="background:white;">
+        <!-- 机械臂主图容器 -->
+        <div id="mainArmImage">
+        <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;">
+          <!-- 基座 -->
+          <rect x="100" y="320" width="100" height="50" rx="5" fill="#0f172a"/>
+          <rect x="110" y="330" width="80" height="30" rx="3" fill="#1e293b"/>
+          <!-- 第一关节（旋转底座） -->
+          <circle cx="150" cy="310" r="25" fill="#334155"/>
+          <circle cx="150" cy="310" r="18" fill="#1e293b"/>
+          <!-- 第一臂段 -->
+          <rect x="135" y="220" width="30" height="90" rx="5" fill="#475569"/>
+          <rect x="140" y="230" width="20" height="70" rx="3" fill="#64748b"/>
+          <!-- 第二关节 -->
+          <circle cx="150" cy="215" r="20" fill="#334155"/>
+          <circle cx="150" cy="215" r="12" fill="#6366f1"/>
+          <!-- 第二臂段 -->
+          <rect x="140" y="130" width="20" height="85" rx="4" fill="#475569"/>
+          <rect x="144" y="140" width="12" height="65" rx="2" fill="#64748b"/>
+          <!-- 第三关节（腕部） -->
+          <circle cx="150" cy="125" r="15" fill="#334155"/>
+          <circle cx="150" cy="125" r="9" fill="#10b981"/>
+          <!-- 充电枪头 -->
+          <rect x="135" y="70" width="30" height="55" rx="5" fill="#0f172a"/>
+          <rect x="140" y="75" width="20" height="30" rx="3" fill="#1e293b"/>
+          <!-- 枪头接口 -->
+          <rect x="145" y="50" width="10" height="25" rx="2" fill="#334155"/>
+          <rect x="147" y="40" width="6" height="15" rx="1" fill="#6366f1"/>
+          <!-- 运动轨迹动画 -->
+          <path d="M 150 310 Q 200 250 180 200 Q 160 150 150 125" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="5,5" opacity="0.5">
+            <animate attributeName="stroke-dashoffset" values="0;20" dur="2s" repeatCount="indefinite"/>
+          </path>
+          <!-- 关节点高亮 -->
+          <circle cx="150" cy="310" r="5" fill="#10b981">
+            <animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="150" cy="215" r="4" fill="#10b981">
+            <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+          </circle>
+          <circle cx="150" cy="125" r="3" fill="#10b981">
+            <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+          </circle>
+          <!-- 6轴标识（小号） -->
+          <text x="150" y="375" text-anchor="middle" fill="#94a3b8" font-size="11">6轴自由度</text>
+        </svg>
+        </div>
+        <!-- 缩略图行 -->
+        <div class="product-thumbs">
+          <div class="thumb arm-thumb active" onclick="switchArmImage(0, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <rect x="24" y="60" width="12" height="10" rx="2" fill="#0f172a"/>
+              <rect x="27" y="44" width="6" height="16" rx="2" fill="#475569"/>
+              <circle cx="30" cy="42" r="5" fill="#334155"/>
+              <rect x="27" y="28" width="6" height="14" rx="2" fill="#475569"/>
+              <circle cx="30" cy="26" r="4" fill="#6366f1"/>
+              <rect x="27" y="14" width="6" height="12" rx="2" fill="#475569"/>
+              <circle cx="30" cy="12" r="3" fill="#10b981"/>
+            </svg>
+            <span>正面</span>
+          </div>
+          <div class="thumb arm-thumb" onclick="switchArmImage(1, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <rect x="26" y="60" width="14" height="10" rx="2" fill="#0f172a"/>
+              <rect x="28" y="38" width="10" height="22" rx="3" fill="#475569" transform="rotate(15 33 49)"/>
+              <circle cx="33" cy="36" r="5" fill="#334155"/>
+              <rect x="28" y="16" width="8" height="20" rx="3" fill="#475569" transform="rotate(-10 32 26)"/>
+              <circle cx="32" cy="14" r="3" fill="#10b981"/>
+            </svg>
+            <span>侧面</span>
+          </div>
+          <div class="thumb arm-thumb" onclick="switchArmImage(2, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <rect x="22" y="60" width="16" height="10" rx="2" fill="#1e293b"/>
+              <rect x="26" y="44" width="8" height="16" rx="2" fill="#334155"/>
+              <circle cx="30" cy="42" r="5" fill="#475569"/>
+              <rect x="26" y="28" width="8" height="14" rx="2" fill="#334155"/>
+              <circle cx="30" cy="26" r="4" fill="#475569"/>
+              <rect x="26" y="14" width="8" height="12" rx="2" fill="#334155"/>
+            </svg>
+            <span>背面</span>
+          </div>
+          <div class="thumb arm-thumb" onclick="switchArmImage(3, this)">
+            <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <rect x="22" y="36" width="16" height="24" rx="3" fill="#0f172a"/>
+              <rect x="25" y="39" width="10" height="12" rx="2" fill="#1e293b"/>
+              <rect x="27" y="22" width="6" height="16" rx="1" fill="#334155"/>
+              <rect x="28" y="14" width="4" height="10" rx="1" fill="#6366f1"/>
+            </svg>
+            <span>枪头</span>
+          </div>
+        </div>
+        <p style="margin-top:12px;color:#64748b;font-size:14px;">VOLTIX-ARM-01</p>
+      </div>
+      <div class="product-info">
+        <h2>Voltix 自动充电机械臂</h2>
+        <p class="model">型号：VOLTIX-ARM-01</p>
+        <div class="price" style="font-size:38px;font-weight:700;color:#10b981;margin-bottom:28px;">
+          面议 <span style="font-size:15px;font-weight:400;color:#64748b;">/台（定制方案）</span>
+        </div>
+        <table class="specs-table">
+          <tr><td>自由度</td><td>6轴</td></tr>
+          <tr><td>工作半径</td><td>1.2米</td></tr>
+          <tr><td>负载能力</td><td>5kg</td></tr>
+          <tr><td>重复定位精度</td><td>±0.1mm</td></tr>
+          <tr><td>充电枪类型</td><td>GB/T 国标兼容</td></tr>
+          <tr><td>视觉系统</td><td>3D视觉识别</td></tr>
+          <tr><td>防护等级</td><td>IP54</td></tr>
+        </table>
+        <ul class="features-list">
+          <li>自动识别充电口位置</li>
+          <li>精准完成插枪动作</li>
+          <li>充电完成后自动拔枪</li>
+          <li>支持多种车型适配</li>
+          <li>安全可靠，多重保护</li>
+          <li>可与机器人配合使用</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary" style="margin-top:20px;padding:16px 48px;font-size:17px;">联系我们</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.svg" alt="Voltix" style="height:32px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));margin-bottom:12px;">
+          <p>极致电能，驱动未来</p>
+        </div>
+        <div class="footer-links">
+          <h4>快速链接</h4>
+          <a href="index.html">首页</a>
+          <a href="products.html">产品中心</a>
+          <a href="about.html">关于我们</a>
+          <a href="partnership.html">合作申请</a>
+          <a href="changelog.html">更新日志</a>
+        </div>
+        <div class="footer-contact">
+          <h4>联系我们</h4>
+          <p>📱 电话：132-2100-2280</p>
+          <p>📧 邮箱：liuxiaohui628@163.com</p>
+          <p>📍 地址：浙江省杭州市</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Voltix · 伏特前行. All rights reserved.</p>
+      </div>
+    </div>
+  <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:8px;">⚙ <a href="admin.html" target="_blank" style="color:#cbd5e1;text-decoration:none;">管理后台</a></p>
+    </footer>
+
+  <script src="nav-user.js?v=1.5.0"></script>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) { nav.classList.add('scrolled'); }
+      else { nav.classList.remove('scrolled'); }
+    });
+
+    // 商品图多角度切换
+    const productSVGs = [
+      // 0=正面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="70" y="40" width="160" height="280" rx="20" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/><rect x="70" y="40" width="160" height="60" rx="20" fill="#0f172a"/><rect x="70" y="80" width="160" height="30" fill="#0f172a"/><rect x="90" y="110" width="120" height="80" rx="4" fill="#1a1a1a" stroke="#333" stroke-width="1"/><text x="150" y="145" text-anchor="middle" fill="#fff" font-size="14">7.0kW</text><text x="150" y="165" text-anchor="middle" fill="#10b981" font-size="12">充电中...</text><circle cx="150" cy="65" r="8" fill="#10b981"><animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/></circle><circle cx="150" cy="230" r="25" fill="#0a0c20" stroke="#4338ca" stroke-width="1.5"/><text x="150" y="238" text-anchor="middle" fill="#6366f1" font-size="20" font-weight="700">V</text><path d="M 230 200 Q 280 200 280 280" fill="none" stroke="#334155" stroke-width="12" stroke-linecap="round"/><path d="M 230 200 Q 280 200 280 280" fill="none" stroke="#475569" stroke-width="8" stroke-linecap="round"/><rect x="265" y="270" width="30" height="50" rx="5" fill="#0f172a"/><rect x="130" y="300" width="40" height="20" rx="4" fill="#334155"/></svg>`,
+      // 1=侧面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="140" y="70" width="280" height="160" rx="20" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" transform="rotate(-90,280,150)"/><rect x="140" y="70" width="280" height="60" rx="20" fill="#0f172a" transform="rotate(-90,280,150)"/><circle cx="280" cy="105" r="8" fill="#10b981"><animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/></circle><text x="60" y="155" fill="#64748b" font-size="12" font-weight="600">SIDE VIEW</text></svg>`,
+      // 2=背面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="70" y="40" width="160" height="280" rx="20" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"/><circle cx="150" cy="130" r="30" fill="#0a0c20" stroke="#4338ca" stroke-width="2"/><text x="150" y="138" text-anchor="middle" fill="#6366f1" font-size="24" font-weight="700">V</text><text x="150" y="250" text-anchor="middle" fill="#64748b" font-size="11">BACK VIEW</text><text x="150" y="290" text-anchor="middle" fill="#94a3b8" font-size="10">壁挂安装孔 × 2</text></svg>`,
+      // 3=细节-墨水屏
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="60" y="80" width="180" height="240" rx="16" fill="#0a0c20" stroke="#1e293b" stroke-width="2"/><rect x="80" y="110" width="140" height="100" rx="8" fill="#1a1a1a" stroke="#333" stroke-width="1"/><text x="150" y="150" text-anchor="middle" fill="#10b981" font-size="18" font-family="monospace">VOLTIX</text><text x="150" y="175" text-anchor="middle" fill="#fff" font-size="14" font-family="monospace">7.0 kW</text><text x="150" y="215" text-anchor="middle" fill="#64748b" font-size="10" font-family="monospace">低功耗 · 强光可见</text><text x="150" y="350" text-anchor="middle" fill="#64748b" font-size="11">2.9" 电子墨水屏</text></svg>`,
+      // 4=安装示意图
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="40" y="300" width="220" height="20" rx="4" fill="#94a3b8"/><rect x="60" y="120" width="180" height="180" rx="20" fill="#0f172a"/><circle cx="150" cy="160" r="20" fill="#0a0c20" stroke="#4338ca" stroke-width="1.5"/><text x="150" y="167" text-anchor="middle" fill="#6366f1" font-size="16" font-weight="700">V</text><path d="M 220 180 L 260 180 L 260 260" fill="none" stroke="#334155" stroke-width="10" stroke-linecap="round"/><circle cx="100" cy="320" r="8" fill="#334155"/><circle cx="200" cy="320" r="8" fill="#334155"/><text x="150" y="370" text-anchor="middle" fill="#64748b" font-size="10">壁挂安装 · 离地 1.2m</text></svg>`
+    ];
+
+    function switchProductImage(index, el) {
+      document.querySelectorAll('.product-thumbs .thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('mainProductImage').innerHTML = productSVGs[index];
+    }
+
+    // 支持主图区域左右滑动切换
+    (function() {
+      var touchStartX = 0;
+      var mainImg = document.getElementById('mainProductImage');
+      if (!mainImg) return;
+      mainImg.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      mainImg.addEventListener('touchend', function(e) {
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) < 40) return; // 太小忽略
+        var thumbs = document.querySelectorAll('#charger .product-thumbs .thumb');
+        var activeIdx = -1;
+        thumbs.forEach(function(t, i) { if (t.classList.contains('active')) activeIdx = i; });
+        var nextIdx = dx < 0 ? Math.min(activeIdx + 1, thumbs.length - 1) : Math.max(activeIdx - 1, 0);
+        if (nextIdx !== activeIdx) switchProductImage(nextIdx, thumbs[nextIdx]);
+      }, { passive: true });
+    })();
+
+    // ====== 机器人多角度切换 ======
+    const robotSVGs = [
+      // 0=正面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="50" y="120" width="200" height="140" rx="20" fill="#0f172a"/><rect x="60" y="130" width="180" height="120" rx="15" fill="#1e293b"/><circle cx="150" cy="105" r="25" fill="#334155"/><circle cx="150" cy="105" r="18" fill="#0f172a"/><circle cx="150" cy="105" r="10" fill="#6366f1"><animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/></circle><path d="M 150 105 L 150 60" stroke="#6366f1" stroke-width="2" opacity="0.6"><animateTransform attributeName="transform" type="rotate" from="0 150 105" to="360 150 105" dur="4s" repeatCount="indefinite"/></path><circle cx="85" cy="280" r="30" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="85" cy="280" r="18" fill="#475569"/><circle cx="85" cy="280" r="8" fill="#64748b"/><circle cx="215" cy="280" r="30" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="215" cy="280" r="18" fill="#475569"/><circle cx="215" cy="280" r="8" fill="#64748b"/><circle cx="85" cy="100" r="25" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="85" cy="100" r="15" fill="#475569"/><circle cx="215" cy="100" r="25" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="215" cy="100" r="15" fill="#475569"/><circle cx="150" cy="190" r="22" fill="#0a0c20" stroke="#4338ca" stroke-width="1.5"/><text x="150" y="197" text-anchor="middle" fill="#6366f1" font-size="18" font-weight="700">V</text><rect x="40" y="160" width="15" height="30" rx="3" fill="#334155"/><circle cx="47" cy="175" r="5" fill="#ef4444"><animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/></circle><rect x="245" y="160" width="15" height="30" rx="3" fill="#334155"/><circle cx="252" cy="175" r="5" fill="#ef4444"><animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/></circle><ellipse cx="150" cy="320" rx="100" ry="15" fill="#000" opacity="0.1"/></svg>`,
+      // 1=侧面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="60" y="120" width="170" height="140" rx="15" fill="#0f172a"/><rect x="70" y="130" width="150" height="120" rx="10" fill="#1e293b"/><circle cx="130" cy="105" r="22" fill="#334155"/><circle cx="130" cy="105" r="15" fill="#0f172a"/><circle cx="130" cy="105" r="8" fill="#6366f1"><animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/></circle><circle cx="85" cy="280" r="28" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="85" cy="280" r="16" fill="#475569"/><circle cx="85" cy="100" r="22" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="85" cy="100" r="13" fill="#475569"/><rect x="230" y="150" width="12" height="60" rx="4" fill="#334155"/><text x="150" y="240" text-anchor="middle" fill="#64748b" font-size="11">SIDE VIEW</text></svg>`,
+      // 2=背面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="50" y="120" width="200" height="140" rx="20" fill="#1e293b"/><circle cx="85" cy="280" r="30" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="85" cy="280" r="18" fill="#334155"/><circle cx="215" cy="280" r="30" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="215" cy="280" r="18" fill="#334155"/><circle cx="85" cy="100" r="25" fill="#1e293b" stroke="#334155" stroke-width="3"/><circle cx="215" cy="100" r="25" fill="#1e293b" stroke="#334155" stroke-width="3"/><rect x="100" y="140" width="100" height="60" rx="8" fill="#0f172a"/><circle cx="120" cy="165" r="6" fill="#334155"/><circle cx="150" cy="165" r="6" fill="#334155"/><circle cx="180" cy="165" r="6" fill="#334155"/><text x="150" y="240" text-anchor="middle" fill="#64748b" font-size="11">BACK VIEW</text><ellipse cx="150" cy="320" rx="100" ry="15" fill="#000" opacity="0.1"/></svg>`,
+      // 3=雷达细节
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><circle cx="150" cy="160" r="80" fill="#0f172a" stroke="#1e293b" stroke-width="3"/><circle cx="150" cy="160" r="60" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/><circle cx="150" cy="160" r="40" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/><circle cx="150" cy="160" r="60" fill="#0f172a"/><circle cx="150" cy="160" r="44" fill="#1e293b"/><circle cx="150" cy="160" r="28" fill="#6366f1" opacity="0.15"><animate attributeName="opacity" values="0.1;0.3;0.1" dur="3s" repeatCount="indefinite"/></circle><path d="M 150 160 L 150 80" stroke="#6366f1" stroke-width="2.5" opacity="0.9"><animateTransform attributeName="transform" type="rotate" from="0 150 160" to="360 150 160" dur="4s" repeatCount="indefinite"/></path><circle cx="150" cy="160" r="12" fill="#334155"/><circle cx="150" cy="160" r="6" fill="#6366f1"/><text x="150" y="290" text-anchor="middle" fill="#64748b" font-size="13">激光雷达 · SLAM导航</text><text x="150" y="310" text-anchor="middle" fill="#94a3b8" font-size="11">360° 全向扫描</text></svg>`
+    ];
+
+    function switchRobotImage(index, el) {
+      document.querySelectorAll('.robot-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('mainRobotImage').innerHTML = robotSVGs[index];
+    }
+
+    // 机器人主图触摸滑动
+    (function() {
+      var touchStartX = 0;
+      var mainImg = document.getElementById('mainRobotImage');
+      if (!mainImg) return;
+      mainImg.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      mainImg.addEventListener('touchend', function(e) {
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) < 40) return;
+        var thumbs = document.querySelectorAll('.robot-thumb');
+        var activeIdx = -1;
+        thumbs.forEach(function(t, i) { if (t.classList.contains('active')) activeIdx = i; });
+        var nextIdx = dx < 0 ? Math.min(activeIdx + 1, thumbs.length - 1) : Math.max(activeIdx - 1, 0);
+        if (nextIdx !== activeIdx) switchRobotImage(nextIdx, thumbs[nextIdx]);
+      }, { passive: true });
+    })();
+
+    // ====== 机械臂多角度切换 ======
+    const armSVGs = [
+      // 0=正面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="100" y="320" width="100" height="50" rx="5" fill="#0f172a"/><rect x="110" y="330" width="80" height="30" rx="3" fill="#1e293b"/><circle cx="150" cy="310" r="25" fill="#334155"/><circle cx="150" cy="310" r="18" fill="#1e293b"/><rect x="135" y="220" width="30" height="90" rx="5" fill="#475569"/><rect x="140" y="230" width="20" height="70" rx="3" fill="#64748b"/><circle cx="150" cy="215" r="20" fill="#334155"/><circle cx="150" cy="215" r="12" fill="#6366f1"/><rect x="140" y="130" width="20" height="85" rx="4" fill="#475569"/><rect x="144" y="140" width="12" height="65" rx="2" fill="#64748b"/><circle cx="150" cy="125" r="15" fill="#334155"/><circle cx="150" cy="125" r="9" fill="#10b981"/><rect x="135" y="70" width="30" height="55" rx="5" fill="#0f172a"/><rect x="140" y="75" width="20" height="30" rx="3" fill="#1e293b"/><rect x="145" y="50" width="10" height="25" rx="2" fill="#334155"/><rect x="147" y="40" width="6" height="15" rx="1" fill="#6366f1"/><path d="M 150 310 Q 200 250 180 200 Q 160 150 150 125" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"><animate attributeName="stroke-dashoffset" values="0;20" dur="2s" repeatCount="indefinite"/></path><circle cx="150" cy="310" r="5" fill="#10b981"><animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/></circle><circle cx="150" cy="215" r="4" fill="#10b981"><animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" begin="0.3s"/></circle><circle cx="150" cy="125" r="3" fill="#10b981"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0.6s"/></circle><text x="150" y="375" text-anchor="middle" fill="#94a3b8" font-size="11">6轴自由度</text></svg>`,
+      // 1=侧面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="110" y="320" width="80" height="50" rx="5" fill="#0f172a"/><circle cx="150" cy="310" r="25" fill="#334155"/><circle cx="150" cy="310" r="18" fill="#1e293b"/><rect x="140" y="230" width="22" height="80" rx="5" fill="#475569" transform="rotate(10 151 270)"/><circle cx="155" cy="222" r="18" fill="#334155"/><circle cx="155" cy="222" r="11" fill="#6366f1"/><rect x="145" y="145" width="18" height="77" rx="4" fill="#475569" transform="rotate(-8 154 184)"/><circle cx="148" cy="138" r="14" fill="#334155"/><circle cx="148" cy="138" r="8" fill="#10b981"/><rect x="140" y="80" width="24" height="58" rx="5" fill="#0f172a" transform="rotate(5 152 109)"/><rect x="147" y="44" width="8" height="40" rx="2" fill="#334155"/><rect x="149" y="36" width="5" height="12" rx="1" fill="#6366f1"/><text x="150" y="376" text-anchor="middle" fill="#94a3b8" font-size="11">SIDE VIEW</text></svg>`,
+      // 2=背面
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="100" y="320" width="100" height="50" rx="5" fill="#1e293b"/><rect x="110" y="330" width="80" height="30" rx="3" fill="#334155"/><circle cx="150" cy="310" r="25" fill="#475569"/><circle cx="150" cy="310" r="18" fill="#334155"/><rect x="136" y="225" width="28" height="85" rx="5" fill="#334155"/><circle cx="150" cy="220" r="18" fill="#475569"/><rect x="138" y="140" width="24" height="80" rx="4" fill="#334155"/><circle cx="150" cy="135" r="14" fill="#475569"/><rect x="138" y="78" width="24" height="57" rx="5" fill="#1e293b"/><text x="75" y="170" fill="#64748b" font-size="11">电源</text><rect x="62" y="175" width="40" height="16" rx="3" fill="#0f172a"/><rect x="66" y="178" width="32" height="10" rx="2" fill="#1e293b"/><text x="150" y="376" text-anchor="middle" fill="#94a3b8" font-size="11">BACK VIEW</text></svg>`,
+      // 3=枪头细节
+      `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;height:auto;"><rect x="110" y="150" width="80" height="120" rx="8" fill="#0f172a" stroke="#1e293b" stroke-width="2"/><rect x="120" y="160" width="60" height="60" rx="5" fill="#1e293b"/><rect x="128" y="168" width="44" height="44" rx="3" fill="#0a0c20"/><circle cx="150" cy="190" r="14" fill="#1e293b" stroke="#334155" stroke-width="2"/><circle cx="150" cy="190" r="9" fill="#0f172a"/><circle cx="150" cy="190" r="4" fill="#6366f1"><animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/></circle><rect x="140" y="90" width="20" height="65" rx="3" fill="#334155"/><rect x="143" y="55" width="14" height="40" rx="2" fill="#334155"/><rect x="144" y="36" width="12" height="22" rx="2" fill="#475569"/><rect x="146" y="24" width="8" height="16" rx="2" fill="#6366f1"/><text x="150" y="310" text-anchor="middle" fill="#64748b" font-size="13">充电枪头</text><text x="150" y="330" text-anchor="middle" fill="#94a3b8" font-size="11">GB/T 国标 · 精准定位</text></svg>`
+    ];
+
+    function switchArmImage(index, el) {
+      document.querySelectorAll('.arm-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('mainArmImage').innerHTML = armSVGs[index];
+    }
+
+    // 机械臂主图触摸滑动
+    (function() {
+      var touchStartX = 0;
+      var mainImg = document.getElementById('mainArmImage');
+      if (!mainImg) return;
+      mainImg.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      mainImg.addEventListener('touchend', function(e) {
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) < 40) return;
+        var thumbs = document.querySelectorAll('.arm-thumb');
+        var activeIdx = -1;
+        thumbs.forEach(function(t, i) { if (t.classList.contains('active')) activeIdx = i; });
+        var nextIdx = dx < 0 ? Math.min(activeIdx + 1, thumbs.length - 1) : Math.max(activeIdx - 1, 0);
+        if (nextIdx !== activeIdx) switchArmImage(nextIdx, thumbs[nextIdx]);
+      }, { passive: true });
+    })();
+  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+}
+</script>
+
+<script>
+// Voltix SW 更新提示 v1.4.1
+(function() {
+  let regRef = null;
+
+  function showUpdateToast() {
+    if (document.getElementById('sw-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'sw-update-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 28px;border-radius:999px;z-index:99999;cursor:pointer;font-size:14px;font-weight:500;box-shadow:0 8px 30px rgba(16,185,129,0.4);letter-spacing:0.5px;';
+    toast.innerHTML = '🎉 发现新版本，点击刷新';
+    toast.onclick = () => {
+      if (regRef && regRef.waiting) {
+        regRef.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    };
+    document.body.appendChild(toast);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        regRef = reg;
+
+        // 情况1：已有等待中的 SW（用户上次忽略了更新）
+        if (reg.waiting) {
+          showUpdateToast();
+          return;
+        }
+
+        // 情况2：检测到新 SW 正在安装
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+
+    // 情况3：SW 发来消息（NEW_VERSION_READY）
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'NEW_VERSION_READY') {
+        showUpdateToast();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
