@@ -1,8 +1,7 @@
 /**
- * Voltix CloudBase 初始化文件 v1.3.0
+ * Voltix CloudBase 初始化文件 v1.3.1
  * 在所有 HTML 页面 </head> 前引入
- * 依赖：cdn.jsdelivr.net/npm/@cloudbase/js-sdk@latest/dist/index.umd.js
- * 备用：static.cloudbase.net/js-sdk/latest/cloudbase.full.js
+ * SDK：cloudbase-sdk.min.js（本地打包，不依赖外部 CDN）
  */
 (function () {
   var _app = null;
