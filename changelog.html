@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>更新日志 - Voltix · 伏特前行</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='96' fill='%230a0c20'/%3E%3Ctext x='100' y='116' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-size='102' font-weight='700' fill='%236366f1'%3EV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=1.5.0">
+  <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@latest/dist/index.umd.js"></script>
+  <script src="cloudbase-init.js?v=1.0.0"></script>
+  <style>
+    .changelog-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #0f172a 100%);
+      padding: 120px 20px 80px;
+      text-align: center;
+      color: white;
+    }
+    .changelog-hero h1 {
+      font-size: clamp(32px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .changelog-hero p {
+      font-size: 18px;
+      color: #94a3b8;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .changelog-body {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 72px 24px;
+    }
+    .version-block {
+      display: flex;
+      gap: 0;
+      margin-bottom: 56px;
+      position: relative;
+    }
+    /* 时间轴竖线 */
+    .version-block::before {
+      content: '';
+      position: absolute;
+      left: 70px;
+      top: 40px;
+      bottom: -56px;
+      width: 2px;
+      background: linear-gradient(to bottom, #6366f1, #e2e8f0);
+    }
+    .version-block:last-child::before {
+      display: none;
+    }
+    .version-date-col {
+      width: 90px;
+      flex-shrink: 0;
+      padding-top: 6px;
+      text-align: right;
+      padding-right: 24px;
+      position: relative;
+    }
+    .version-date-col .date-badge {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+    /* 时间轴圆点 */
+    .version-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #6366f1;
+      border: 3px solid white;
+      box-shadow: 0 0 0 3px #6366f1;
+      flex-shrink: 0;
+      margin-top: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .version-dot.major {
+      background: #10b981;
+      box-shadow: 0 0 0 3px #10b981;
+      width: 18px;
+      height: 18px;
+      margin-top: 6px;
+    }
+    .version-content {
+      flex: 1;
+      padding-left: 24px;
+    }
+    .version-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .version-tag {
+      display: inline-block;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .version-tag.major {
+      background: #d1fae5;
+      color: #059669;
+    }
+    .version-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .change-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .change-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-radius: 10px;
+      border-left: 3px solid transparent;
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .change-item.fix {
+      border-left-color: #f59e0b;
+    }
+    .change-item.feat {
+      border-left-color: #10b981;
+    }
+    .change-item.improve {
+      border-left-color: #6366f1;
+    }
+    .change-item.deploy {
+      border-left-color: #94a3b8;
+    }
+    .change-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .change-badge.fix { background: #fef3c7; color: #d97706; }
+    .change-badge.feat { background: #d1fae5; color: #059669; }
+    .change-badge.improve { background: #eef2ff; color: #4f46e5; }
+    .change-badge.deploy { background: #f1f5f9; color: #64748b; }
+
+    /* 版本分割线 */
+    .section-label {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      margin-bottom: 32px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    @media (max-width: 600px) {
+      .version-date-col { width: 60px; padding-right: 14px; }
+      .version-block::before { left: 50px; }
+      .version-content { padding-left: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;">
+        <img src="logo.svg" alt="Voltix" style="height:36px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));">
+        <span style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:1px;">Voltix · 伏特前行</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="products.html" class="nav-link">产品中心</a>
+        <a href="about.html" class="nav-link">关于我们</a>
+        <a href="partnership.html" class="nav-link">合作申请</a>
+        <a href="contact.html" class="nav-link">联系我们</a>
+      </div>
+      <div class="nav-user" id="navUser">
+        <a href="login.html" class="nav-link">登录</a>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">首页</a>
+      <a href="products.html">产品中心</a>
+      <a href="about.html">关于我们</a>
+      <a href="partnership.html">合作申请</a>
+      <a href="contact.html">联系我们</a>
+      <a href="login.html" id="mobileLoginLink">登录</a>
+    </div>
+  </nav>
+
+  <!-- 页面顶部 Hero -->
+  <div class="changelog-hero">
+    <h1>更新日志</h1>
+    <p>我们持续优化产品体验，每一次更新都让 Voltix 更好用。</p>
+  </div>
+
+  <!-- 更新日志正文 -->
+  <div class="changelog-body">
+
+    <div class="section-label">最近更新</div>
+
+    <!-- v1.6.1 -->
+    <div class="version-block">
+      <div class="version-date-col">
+        <div class="date-badge">2026<br>05/12</div>
+      </div>
+      <div class="version-dot fix"></div>
+      <div class="version-content">
+        <div class="version-header">
+          <span class="version-tag fix">v1.6.1</span>
+          <span class="version-title">管理后台登录按钮卡死 Bug 彻底修复</span>
+        </div>
+        <ul class="change-list">
+          <li class="change-item fix">
+            <span class="change-badge fix">修复</span>
+            彻底重构 checkAdmin() 函数：改用 async/await + Promise + finally 模式，完全消除 setTimeout 嵌套回调造成的按钮状态丢失问题。密码错误时按钮现在能正确恢复为可点击状态，不再卡死
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            管理后台登录态改用独立 sessionStorage key（voltix_admin_local），完全不依赖 CloudBase SDK，彻底消除 SDK 加载时序导致的登录态判断失败问题
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v1.6.0 -->
+    <div class="version-block">
+      <div class="version-date-col">
+        <div class="date-badge">2026<br>05/12</div>
+      </div>
+      <div class="version-dot major"></div>
+      <div class="version-content">
+        <div class="version-header">
+          <span class="version-tag major">v1.6.0</span>
+          <span class="version-title">管理后台登录修复 · 关于我们页面品牌区域升级</span>
+        </div>
+        <ul class="change-list">
+          <li class="change-item fix">
+            <span class="change-badge fix">修复</span>
+            管理后台登录 Bug：CloudBase SDK 异步加载时 setAdminLoggedIn 未定义，导致输入4位密码点击登录后按钮卡在「登录中...」无响应。现已添加本地 fallback 及 try-catch 防护，确保任何环境下登录均正常工作
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            关于我们页面品牌区域重构：Logo 改为发光行星轨道 SVG（与管理后台一致风格），布局调整为上下结构（Logo 居中在上，VOLTIX 文字 + 伏特前行 slogan 在下）
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            关于我们品牌 Logo 展示区三款版本（主方案·深空紫、白底黑字版、黑底白字版）全部升级为发光行星轨道款，替代原简版 V 字圆圈样式
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v1.5.0 -->
+    <div class="version-block">
+      <div class="version-date-col">
+        <div class="date-badge">2026<br>05/12</div>
+      </div>
+      <div class="version-dot major"></div>
+      <div class="version-content">
+        <div class="version-header">
+          <span class="version-tag major">v1.5.0</span>
+          <span class="version-title">数据库迁移至腾讯云 CloudBase · 管理后台全面升级</span>
+        </div>
+        <ul class="change-list">
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            全站数据存储从 localStorage 迁移至腾讯云 CloudBase 文档型数据库（集合：users / applications / contacts），用户数据持久化、跨设备同步
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            新建 cloudbase-init.js，封装 registerUser / loginUser / submitApplication / submitContact / fetchUsers 等全量数据库 API
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            管理后台 Logo 重设计：升级为与官网一致的发光电子轨道 SVG Logo（深色圆形+三轴轨道+发光 V 字），布局改为 Logo 居中在上、品牌名+Slogan 在下
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            注册密码最低长度由 6 位调整为 4 位
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            管理后台侧边栏底部新增「回到官网」按钮，点击新标签页打开官网首页
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            官网所有页面跳转管理后台改为新标签页打开（target="_blank"），不影响当前浏览
+          </li>
+          <li class="change-item deploy">
+            <span class="change-badge deploy">部署</span>
+            已部署至腾讯云 CloudBase 静态托管，CloudBase 环境 ID：voltix-prod-d9gpbrzsm7e719fc5
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v1.4.0 -->
+    <div class="version-block">
+      <div class="version-date-col">
+        <div class="date-badge">2026<br>05/07</div>
+      </div>
+      <div class="version-dot major"></div>
+      <div class="version-content">
+        <div class="version-header">
+          <span class="version-tag major">v1.4.0</span>
+          <span class="version-title">管理后台体验升级 · 产品图视角切换</span>
+        </div>
+        <ul class="change-list">
+          <li class="change-item fix">
+            <span class="change-badge fix">修复</span>
+            管理后台登录按钮事件绑定失效（checkAdmin is not defined），修复 JS 初始化顺序导致函数未注册的问题
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            管理后台登录新增加载状态、详细错误提示（密码错误/存储失败）、绿色成功反馈动画
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            全站 Toast 通知系统：替代 alert()，右上角滑入/滑出动画，3秒自动消失
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            产品中心「自动挪车机器人」和「自动充电机械臂」支持正面/侧面/背面/细节图视角切换（与充电桩一致）
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            产品中心机器人/机械臂详情图移除超大产品编号展示，样式与智能充电桩保持统一
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            更新日志页面（本页）上线，底部 footer 可直达
+          </li>
+          <li class="change-item deploy">
+            <span class="change-badge deploy">部署</span>
+            已同步发布至 voltix-official.surge.sh，Gitee html-version 分支同步
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v1.3.0 -->
+    <div class="version-block">
+      <div class="version-date-col">
+        <div class="date-badge">2026<br>05/07</div>
+      </div>
+      <div class="version-dot"></div>
+      <div class="version-content">
+        <div class="version-header">
+          <span class="version-tag">v1.3.0</span>
+          <span class="version-title">四项核心 Bug 修复</span>
+        </div>
+        <ul class="change-list">
+          <li class="change-item fix">
+            <span class="change-badge fix">修复</span>
+            管理后台登录体验优化，添加加载状态和详细错误提示
+          </li>
+          <li class="change-item fix">
+            <span class="change-badge fix">修复</span>
+            全站页脚邮箱地址被占位符替换问题，批量恢复为 liuxiaohui628@163.com
+          </li>
+          <li class="change-item fix">
+            <span class="change-badge fix">修复</span>
+            产品中心缩略图点击无法切换主图（主图容器缺少 id="mainProductImage"）
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            产品中心主图支持左右触摸滑动切换视角
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            所有手机号输入框统一正则校验 /^1[3-9]\d{9}$/，限制11位，实时过滤非数字字符
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v1.2.0 -->
+    <div class="version-block">
+      <div class="version-date-col">
+        <div class="date-badge">2026<br>04/28</div>
+      </div>
+      <div class="version-dot major"></div>
+      <div class="version-content">
+        <div class="version-header">
+          <span class="version-tag major">v1.2.0</span>
+          <span class="version-title">官网全面重构 · Git 版本控制接入</span>
+        </div>
+        <ul class="change-list">
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            项目接入 Git 版本控制，Gitee 仓库（gitee.com/voltix/voltix-website），每次变更自动提交推送
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            管理后台重构为广字型布局：左侧固定侧边栏 + 右侧主内容区 + 顶部固定 Header
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            管理后台所有下拉筛选器改为带 icon 的平铺按钮组样式
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            用户管理页面支持查看详情和编辑用户信息（保存至 localStorage）
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            Service Worker 注册，支持页面资源缓存加速
+          </li>
+          <li class="change-item deploy">
+            <span class="change-badge deploy">部署</span>
+            正式上线至 surge.sh，外网地址：voltix-official.surge.sh
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v1.1.0 -->
+    <div class="version-block">
+      <div class="version-date-col">
+        <div class="date-badge">2026<br>04/20</div>
+      </div>
+      <div class="version-dot"></div>
+      <div class="version-content">
+        <div class="version-header">
+          <span class="version-tag">v1.1.0</span>
+          <span class="version-title">注册登录 · 个人中心 · 品牌规范统一</span>
+        </div>
+        <ul class="change-list">
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            注册/登录页面（login.html）：手机号必填，邮箱选填，密码强度校验
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            个人中心页面（profile.html）：查看/编辑个人信息，退出登录
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            品牌名称全站统一为「Voltix · 伏特前行」，Logo 使用深色圆形背景+电子轨道+V字 SVG 风格
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            联系我们页面咨询类型改为平铺单选按钮（替代下拉框）
+          </li>
+          <li class="change-item improve">
+            <span class="change-badge improve">改进</span>
+            合作申请页面安装位置改为带 icon 的大按钮平铺样式
+          </li>
+          <li class="change-item fix">
+            <span class="change-badge fix">修复</span>
+            移除全站所有「智能」字样，避免消费者保护法中对不确定性描述的违规风险
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v1.0.0 -->
+    <div class="version-block">
+      <div class="version-date-col">
+        <div class="date-badge">2026<br>04/14</div>
+      </div>
+      <div class="version-dot major"></div>
+      <div class="version-content">
+        <div class="version-header">
+          <span class="version-tag major">v1.0.0</span>
+          <span class="version-title">官网正式上线</span>
+        </div>
+        <ul class="change-list">
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            官网五大页面上线：首页、产品中心、关于我们、合作申请、联系我们
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            产品中心三款产品展示：Voltix 智能充电桩（VOLTIX-7K）、自动挪车机器人、自动充电机械臂
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            管理后台（admin.html）：合作申请管理、联系咨询管理、注册用户管理
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            合作申请表单（partnership.html）：场所信息、联系信息、安装需求，数据存入 localStorage
+          </li>
+          <li class="change-item feat">
+            <span class="change-badge feat">新增</span>
+            联系我们表单（contact.html）：多类型咨询，数据存入 localStorage
+          </li>
+          <li class="change-item deploy">
+            <span class="change-badge deploy">部署</span>
+            技术栈：纯 HTML + CSS + Vanilla JS，无后端依赖，surge.sh 静态托管
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.svg" alt="Voltix" style="height:32px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));margin-bottom:12px;">
+          <p>极致电能，驱动未来</p>
+        </div>
+        <div class="footer-links">
+          <h4>快速链接</h4>
+          <a href="index.html">首页</a>
+          <a href="products.html">产品中心</a>
+          <a href="about.html">关于我们</a>
+          <a href="partnership.html">合作申请</a>
+          <a href="changelog.html">更新日志</a>
+        </div>
+        <div class="footer-contact">
+          <h4>联系我们</h4>
+          <p>📱 电话：132-2100-2280</p>
+          <p>📧 邮箱：liuxiaohui628@163.com</p>
+          <p>📍 地址：浙江省杭州市</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Voltix · 伏特前行. All rights reserved.</p>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:8px;">⚙ <a href="admin.html" style="color:#cbd5e1;text-decoration:none;">管理后台</a></p>
+  </footer>
+
+  <script src="nav-user.js?v=1.5.0"></script>
+  <script>
+    function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('active'); }
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+    });
+  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+}
+</script>
+
+<script>
+// Voltix SW 更新提示 v1.4.1
+(function() {
+  let regRef = null;
+
+  function showUpdateToast() {
+    if (document.getElementById('sw-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'sw-update-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 28px;border-radius:999px;z-index:99999;cursor:pointer;font-size:14px;font-weight:500;box-shadow:0 8px 30px rgba(16,185,129,0.4);letter-spacing:0.5px;';
+    toast.innerHTML = '🎉 发现新版本，点击刷新';
+    toast.onclick = () => {
+      if (regRef && regRef.waiting) {
+        regRef.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    };
+    document.body.appendChild(toast);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        regRef = reg;
+
+        // 情况1：已有等待中的 SW（用户上次忽略了更新）
+        if (reg.waiting) {
+          showUpdateToast();
+          return;
+        }
+
+        // 情况2：检测到新 SW 正在安装
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+
+    // 情况3：SW 发来消息（NEW_VERSION_READY）
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'NEW_VERSION_READY') {
+        showUpdateToast();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
