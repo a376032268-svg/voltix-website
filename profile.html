@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人中心 - Voltix · 伏特前行</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='96' fill='%230a0c20'/%3E%3Ctext x='100' y='116' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-size='102' font-weight='700' fill='%236366f1'%3EV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=1.5.0">
+  <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@latest/dist/index.umd.js"></script>
+  <script src="cloudbase-init.js?v=1.2.0"></script>
+  <style>
+    .profile-container {
+      min-height: 100vh;
+      padding: 100px 20px 60px;
+      background: #f8fafc;
+    }
+    .profile-header {
+      max-width: 800px;
+      margin: 0 auto 32px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 20px;
+      padding: 48px 40px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 4px solid rgba(255,255,255,0.2);
+    }
+    .profile-info h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .profile-info p {
+      opacity: 0.8;
+      font-size: 15px;
+    }
+    .profile-content {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+    .profile-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .profile-card h2 {
+      font-size: 18px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .profile-card h2::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: #10b981;
+      border-radius: 2px;
+    }
+    .info-row {
+      display: flex;
+      padding: 16px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    .info-label {
+      width: 120px;
+      color: #64748b;
+      font-size: 14px;
+    }
+    .info-value {
+      flex: 1;
+      color: #0f172a;
+      font-weight: 500;
+    }
+    .profile-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+    .btn-danger {
+      background: #fef2f2;
+      color: #ef4444;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-danger:hover {
+      background: #fee2e2;
+    }
+    .edit-form {
+      display: none;
+    }
+    .edit-form.active {
+      display: block;
+    }
+    .info-display {
+      display: block;
+    }
+    .info-display.hidden {
+      display: none;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .msg {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-top: 16px;
+      font-size: 14px;
+      display: none;
+    }
+    .msg.error {
+      display: block;
+      background: #fef2f2;
+      color: #ef4444;
+    }
+    .msg.success {
+      display: block;
+      background: #f0fdf4;
+      color: #059669;
+    }
+    @media (max-width: 600px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 32px 24px;
+      }
+      .info-row {
+        flex-direction: column;
+        gap: 4px;
+      }
+      .info-label {
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;">
+        <img src="logo.svg" alt="Voltix" style="height:36px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));">
+        <span style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:1px;">Voltix · 伏特前行</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="products.html" class="nav-link">产品中心</a>
+        <a href="about.html" class="nav-link">关于我们</a>
+        <a href="partnership.html" class="nav-link">合作申请</a>
+        <a href="contact.html" class="nav-link">联系我们</a>
+      </div>
+      <div class="nav-user" id="navUser"></div>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">首页</a>
+      <a href="products.html">产品中心</a>
+      <a href="about.html">关于我们</a>
+      <a href="partnership.html">合作申请</a>
+      <a href="contact.html">联系我们</a>
+      <a href="profile.html">个人中心</a>
+      <a href="#" onclick="logout()">退出登录</a>
+    </div>
+  </nav>
+
+  <!-- 个人中心内容 -->
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar" id="userAvatar">V</div>
+      <div class="profile-info">
+        <h1 id="userName">加载中...</h1>
+        <p id="userEmail">加载中...</p>
+      </div>
+    </div>
+
+    <div class="profile-content">
+      <!-- 基本信息 -->
+      <div class="profile-card">
+        <h2>基本信息</h2>
+
+        <!-- 展示模式 -->
+        <div class="info-display" id="infoDisplay">
+          <div class="info-row">
+            <div class="info-label">姓名</div>
+            <div class="info-value" id="displayName">-</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">邮箱</div>
+            <div class="info-value" id="displayEmail">-</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">公司</div>
+            <div class="info-value" id="displayCompany">-</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">注册时间</div>
+            <div class="info-value" id="displayCreatedAt">-</div>
+          </div>
+          <div class="profile-actions">
+            <button class="btn btn-primary" onclick="showEdit()">编辑资料</button>
+            <button class="btn btn-danger" onclick="logout()">退出登录</button>
+          </div>
+        </div>
+
+        <!-- 编辑模式 -->
+        <form class="edit-form" id="editForm" onsubmit="saveProfile(event)">
+          <div class="form-group">
+            <label>姓名</label>
+            <input type="text" id="editName" required>
+          </div>
+          <div class="form-group">
+            <label>公司名称</label>
+            <input type="text" id="editCompany" placeholder="选填">
+          </div>
+          <div class="msg" id="profileMsg"></div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">保存修改</button>
+            <button type="button" class="btn btn-secondary" onclick="cancelEdit()">取消</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 我的申请 -->
+      <div class="profile-card">
+        <h2>我的申请</h2>
+        <div id="myApplications">
+          <p style="color:#64748b;text-align:center;padding:40px 0;">加载中...</p>
+        </div>
+      </div>
+
+      <!-- 我的咨询 -->
+      <div class="profile-card">
+        <h2>我的咨询</h2>
+        <div id="myContacts">
+          <p style="color:#64748b;text-align:center;padding:40px 0;">加载中...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.svg" alt="Voltix" style="height:32px;width:32px;object-fit:cover;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));margin-bottom:12px;">
+          <p>极致电能，驱动未来</p>
+        </div>
+        <div class="footer-links">
+          <h4>快速链接</h4>
+          <a href="index.html">首页</a>
+          <a href="products.html">产品中心</a>
+          <a href="about.html">关于我们</a>
+          <a href="partnership.html">合作申请</a>
+          <a href="changelog.html">更新日志</a>
+        </div>
+        <div class="footer-contact">
+          <h4>联系我们</h4>
+          <p>📱 电话：132-2100-2280</p>
+          <p>📧 邮箱：liuxiaohui628@163.com</p>
+          <p>📍 地址：浙江省杭州市</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Voltix · 伏特前行. All rights reserved.</p>
+      </div>
+    </div>
+  <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:8px;">⚙ <a href="admin.html" target="_blank" style="color:#cbd5e1;text-decoration:none;">管理后台</a></p>
+    </footer>
+
+  <script>
+    // 检查登录状态
+    let currentUser = getCurrentUser(); // cloudbase-init.js 提供
+    let fullUser = null;
+
+    if (!currentUser) {
+      window.location.href = 'login.html';
+      throw new Error('未登录');
+    }
+
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        // 获取完整用户信息（从数据库）
+        const users = await fetchUsers();
+        fullUser = users.find(u => u._id === currentUser?.id) || null;
+
+        if (!fullUser) {
+          // 数据库中没有此用户记录（可能因网络问题导致注册未写入）
+          document.getElementById('myApplications').innerHTML =
+            '<p style="color:#ef4444;text-align:center;padding:40px 0;">⚠️ 用户数据加载失败，请重新 <a href="login.html" style="color:#10b981;">登录</a> 后再试</p>';
+          document.getElementById('myContacts').innerHTML =
+            '<p style="color:#ef4444;text-align:center;padding:40px 0;">⚠️ 用户数据加载失败，请重新 <a href="login.html" style="color:#10b981;">登录</a> 后再试</p>';
+          document.getElementById('profileMsg') && (document.getElementById('profileMsg').textContent = '⚠️ 用户信息未找到，请重新登录');
+          return;
+        }
+
+        await Promise.all([loadUserInfo(), loadMyApplications(), loadMyContacts()]);
+      } catch (e) {
+        console.error('初始化失败:', e);
+        document.getElementById('myApplications').innerHTML =
+          '<p style="color:#ef4444;text-align:center;padding:40px 0;">⚠️ 加载失败：' + e.message + '。请检查网络后刷新页面</p>';
+        document.getElementById('myContacts').innerHTML =
+          '<p style="color:#94a3b8;text-align:center;padding:40px 0;">暂无咨询记录</p>';
+      }
+    });
+
+    function initNav() {
+      // nav-user.js 会自动处理
+    }
+
+    async function loadUserInfo() {
+      if (!fullUser) return;
+
+      document.getElementById('userAvatar').textContent = fullUser.name.charAt(0);
+      document.getElementById('userName').textContent = fullUser.name;
+      document.getElementById('userEmail').textContent = fullUser.email || '未填写';
+
+      document.getElementById('displayName').textContent = fullUser.name;
+      document.getElementById('displayEmail').textContent = fullUser.email || '未填写';
+      document.getElementById('displayCompany').textContent = fullUser.company || '未填写';
+      document.getElementById('displayCreatedAt').textContent = fullUser.createdAt
+        ? new Date(fullUser.createdAt).toLocaleDateString('zh-CN')
+        : '-';
+
+      document.getElementById('editName').value = fullUser.name;
+      document.getElementById('editCompany').value = fullUser.company || '';
+    }
+
+    function showEdit() {
+      document.getElementById('infoDisplay').classList.add('hidden');
+      document.getElementById('editForm').classList.add('active');
+    }
+
+    function cancelEdit() {
+      document.getElementById('infoDisplay').classList.remove('hidden');
+      document.getElementById('editForm').classList.remove('active');
+      document.getElementById('profileMsg').style.display = 'none';
+      if (fullUser) {
+        document.getElementById('editName').value = fullUser.name;
+        document.getElementById('editCompany').value = fullUser.company || '';
+      }
+    }
+
+    async function saveProfile(e) {
+      e.preventDefault();
+      const newName = document.getElementById('editName').value.trim();
+      const newCompany = document.getElementById('editCompany').value.trim();
+      const msgEl = document.getElementById('profileMsg');
+
+      if (!newName) {
+        msgEl.textContent = '请输入姓名';
+        msgEl.className = 'msg error';
+        msgEl.style.display = 'block';
+        return;
+      }
+
+      try {
+        await updateUser(fullUser._id, { name: newName, company: newCompany });
+        fullUser.name = newName;
+        fullUser.company = newCompany;
+        setCurrentUser(fullUser);
+        loadUserInfo();
+        initNav();
+        msgEl.textContent = '资料更新成功！';
+        msgEl.className = 'msg success';
+        msgEl.style.display = 'block';
+        setTimeout(() => cancelEdit(), 1000);
+      } catch (err) {
+        msgEl.textContent = err.message || '更新失败，请重试';
+        msgEl.className = 'msg error';
+        msgEl.style.display = 'block';
+      }
+    }
+
+    async function loadMyApplications() {
+      const container = document.getElementById('myApplications');
+      try {
+        const apps = await fetchApplications();
+        const myApps = apps.filter(a =>
+          a.contactPhone === fullUser?.phone ||
+          a._id === fullUser?._id
+        );
+
+        if (myApps.length === 0) {
+          container.innerHTML = `<p style="color:#94a3b8;text-align:center;padding:40px 0;">暂无合作申请记录</p>`;
+          return;
+        }
+
+        container.innerHTML = myApps.map(app => `
+          <div style="padding:20px;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <span style="font-weight:600;">${app.companyName || '未命名申请'}</span>
+              <span style="padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;${getStatusStyle(app.status)}">${getStatusText(app.status)}</span>
+            </div>
+            <div style="color:#64748b;font-size:14px;">
+              <p>申请桩数：${app.pileCount || '-'} 个</p>
+              <p>申请时间：${app.createdAt ? new Date(app.createdAt).toLocaleDateString('zh-CN') : '-'}</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        container.innerHTML = `<p style="color:#ef4444;text-align:center;padding:40px 0;">加载失败：${e.message}</p>`;
+      }
+    }
+
+    async function loadMyContacts() {
+      const container = document.getElementById('myContacts');
+      try {
+        const contacts = await fetchContacts();
+        const myContacts = contacts.filter(c =>
+          c.phone === fullUser?.phone ||
+          c.email === fullUser?.email
+        );
+
+        if (myContacts.length === 0) {
+          container.innerHTML = `<p style="color:#94a3b8;text-align:center;padding:40px 0;">暂无咨询记录</p>`;
+          return;
+        }
+
+        const typeMap = {
+          purchase: '产品购买咨询',
+          partnership: '场地合作申请',
+          invest: '投资合作',
+          tech: '技术支持',
+          other: '其他'
+        };
+
+        container.innerHTML = myContacts.map(c => `
+          <div style="padding:20px;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <span style="font-weight:600;">${typeMap[c.type] || '咨询'}</span>
+              <span style="color:#94a3b8;font-size:13px;">${c.createdAt ? new Date(c.createdAt).toLocaleDateString('zh-CN') : '-'}</span>
+            </div>
+            <div style="color:#64748b;font-size:14px;">
+              <p>联系人：${c.name || '-'}</p>
+              <p>电话：${c.phone || '-'}</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        container.innerHTML = `<p style="color:#ef4444;text-align:center;padding:40px 0;">加载失败：${e.message}</p>`;
+      }
+    }
+
+    function getStatusStyle(status) {
+      const styles = {
+        pending: 'background:#fef3c7;color:#d97706;',
+        approved: 'background:#d1fae5;color:#059669;',
+        rejected: 'background:#fee2e2;color:#ef4444;'
+      };
+      return styles[status] || styles.pending;
+    }
+
+    function getStatusText(status) {
+      const texts = {
+        pending: '审核中',
+        approved: '已通过',
+        rejected: '已拒绝'
+      };
+      return texts[status] || '审核中';
+    }
+
+    function logout() {
+      if (confirm('确定要退出登录吗？')) {
+        setCurrentUser(null);
+        window.location.href = 'index.html';
+      }
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) { nav.classList.add('scrolled'); }
+      else { nav.classList.remove('scrolled'); }
+    });
+  </script>
+<script src="nav-user.js?v=1.5.0"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+}
+</script>
+
+<script>
+// Voltix SW 更新提示 v1.4.1
+(function() {
+  let regRef = null;
+
+  function showUpdateToast() {
+    if (document.getElementById('sw-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'sw-update-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 28px;border-radius:999px;z-index:99999;cursor:pointer;font-size:14px;font-weight:500;box-shadow:0 8px 30px rgba(16,185,129,0.4);letter-spacing:0.5px;';
+    toast.innerHTML = '🎉 发现新版本，点击刷新';
+    toast.onclick = () => {
+      if (regRef && regRef.waiting) {
+        regRef.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    };
+    document.body.appendChild(toast);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        regRef = reg;
+
+        // 情况1：已有等待中的 SW（用户上次忽略了更新）
+        if (reg.waiting) {
+          showUpdateToast();
+          return;
+        }
+
+        // 情况2：检测到新 SW 正在安装
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+
+    // 情况3：SW 发来消息（NEW_VERSION_READY）
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'NEW_VERSION_READY') {
+        showUpdateToast();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
