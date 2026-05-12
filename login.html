@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录/注册 - Voltix · 伏特前行</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='96' fill='%230a0c20'/%3E%3Ctext x='100' y='116' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-size='102' font-weight='700' fill='%236366f1'%3EV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=1.5.0">
+  <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@latest/dist/index.umd.js"></script>
+  <script src="cloudbase-init.js?v=1.2.0"></script>
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px 40px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #059669 100%);
+    }
+    .auth-box {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .auth-header img {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+    }
+    .auth-header h1 {
+      font-size: 24px;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .auth-header p {
+      color: #64748b;
+      font-size: 14px;
+    }
+    .auth-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .auth-tab.active {
+      background: white;
+      color: #0f172a;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .auth-form {
+      display: none;
+    }
+    .auth-form.active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+    .form-group label .optional {
+      font-weight: 400;
+      color: #94a3b8;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+    .form-group input::placeholder {
+      color: #94a3b8;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 8px;
+    }
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(16,185,129,0.35);
+    }
+    .auth-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .auth-msg {
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-top: 16px;
+      font-size: 14px;
+      display: none;
+    }
+    .auth-msg.error {
+      display: block;
+      background: #fef2f2;
+      color: #ef4444;
+    }
+    .auth-msg.success {
+      display: block;
+      background: #f0fdf4;
+      color: #059669;
+    }
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .auth-footer a {
+      color: #10b981;
+      font-weight: 600;
+    }
+    @media (max-width: 480px) {
+      .auth-box {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;">
+        <img src="logo.svg" alt="Voltix" style="height:36px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));">
+        <span style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:1px;">Voltix · 伏特前行</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="products.html" class="nav-link">产品中心</a>
+        <a href="about.html" class="nav-link">关于我们</a>
+        <a href="partnership.html" class="nav-link">合作申请</a>
+        <a href="contact.html" class="nav-link">联系我们</a>
+      </div>
+      <div class="nav-user" id="navUser">
+        <a href="login.html" class="nav-link active">登录</a>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">首页</a>
+      <a href="products.html">产品中心</a>
+      <a href="about.html">关于我们</a>
+      <a href="partnership.html">合作申请</a>
+      <a href="contact.html">联系我们</a>
+      <a href="login.html">登录</a>
+    </div>
+  </nav>
+
+  <!-- 登录/注册区域 -->
+  <div class="auth-container">
+    <div class="auth-box">
+      <div class="auth-header">
+        <img src="logo.svg" alt="Voltix">
+        <h1>Voltix · 伏特前行</h1>
+        <p>极致电能，驱动未来</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">登录</button>
+        <button class="auth-tab" onclick="switchTab('register')">注册</button>
+      </div>
+
+      <!-- 登录表单 -->
+      <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>手机号码 *</label>
+          <input type="tel" id="loginPhone" required placeholder="请输入手机号码" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
+        </div>
+        <div class="form-group">
+          <label>密码 *</label>
+          <input type="password" id="loginPassword" required placeholder="请输入密码" minlength="4">
+        </div>
+        <div class="auth-msg" id="loginMsg"></div>
+        <button type="submit" class="auth-btn" id="loginBtn">登录</button>
+      </form>
+
+      <!-- 注册表单 -->
+      <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>姓名 *</label>
+          <input type="text" id="regName" required placeholder="请输入您的真实姓名">
+        </div>
+        <div class="form-group">
+          <label>手机号码 *</label>
+          <input type="tel" id="regPhone" required placeholder="请输入手机号码" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
+        </div>
+        <div class="form-group">
+          <label>密码 *</label>
+          <input type="password" id="regPassword" required placeholder="请设置密码（至少4位）" minlength="4">
+        </div>
+        <div class="form-group">
+          <label>电子邮箱 <span class="optional">选填</span></label>
+          <input type="email" id="regEmail" placeholder="请输入邮箱地址（选填）">
+        </div>
+        <div class="form-group">
+          <label>公司名称 <span class="optional">选填</span></label>
+          <input type="text" id="regCompany" placeholder="请输入公司名称（选填）">
+        </div>
+        <div class="auth-msg" id="registerMsg"></div>
+        <button type="submit" class="auth-btn" id="registerBtn">注册</button>
+      </form>
+
+      <div class="auth-footer">
+        <a href="index.html">← 返回首页</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 切换登录/注册选项卡
+    function switchTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+
+      if (tab === 'login') {
+        document.querySelectorAll('.auth-tab')[0].classList.add('active');
+        document.getElementById('loginForm').classList.add('active');
+      } else {
+        document.querySelectorAll('.auth-tab')[1].classList.add('active');
+        document.getElementById('registerForm').classList.add('active');
+      }
+    }
+
+    function showMsg(form, msg, type) {
+      const el = document.getElementById(form + 'Msg');
+      el.textContent = msg;
+      el.className = 'auth-msg ' + type;
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) { nav.classList.add('scrolled'); }
+      else { nav.classList.remove('scrolled'); }
+    });
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      btn.textContent = '登录中...';
+
+      const phone = document.getElementById('loginPhone').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!/^1[3-9]\d{9}$/.test(phone)) {
+        showMsg('login', '请输入正确的手机号码', 'error');
+        btn.disabled = false;
+        btn.textContent = '登录';
+        return;
+      }
+
+      try {
+        const user = await loginUser(phone, password);
+        setCurrentUser(user);
+        showMsg('login', '登录成功！正在跳转...', 'success');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+      } catch (err) {
+        showMsg('login', err.message || '登录失败，请重试', 'error');
+        btn.disabled = false;
+        btn.textContent = '登录';
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = true;
+      btn.textContent = '注册中...';
+
+      const name = document.getElementById('regName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const email = document.getElementById('regEmail').value.trim();
+      const company = document.getElementById('regCompany').value.trim();
+
+      if (!/^1[3-9]\d{9}$/.test(phone)) {
+        showMsg('register', '请输入正确的手机号码', 'error');
+        btn.disabled = false;
+        btn.textContent = '注册';
+        return;
+      }
+
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showMsg('register', '请输入有效的邮箱地址', 'error');
+        btn.disabled = false;
+        btn.textContent = '注册';
+        return;
+      }
+
+      try {
+        await registerUser(name, phone, password, email, company);
+        const user = await loginUser(phone, password);
+        setCurrentUser(user);
+        showMsg('register', '注册成功！正在跳转...', 'success');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+      } catch (err) {
+        showMsg('register', err.message || '注册失败，请重试', 'error');
+        btn.disabled = false;
+        btn.textContent = '注册';
+      }
+    }
+  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+}
+</script>
+
+<script>
+// Voltix SW 更新提示 v1.4.1
+(function() {
+  let regRef = null;
+
+  function showUpdateToast() {
+    if (document.getElementById('sw-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'sw-update-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 28px;border-radius:999px;z-index:99999;cursor:pointer;font-size:14px;font-weight:500;box-shadow:0 8px 30px rgba(16,185,129,0.4);letter-spacing:0.5px;';
+    toast.innerHTML = '🎉 发现新版本，点击刷新';
+    toast.onclick = () => {
+      if (regRef && regRef.waiting) {
+        regRef.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    };
+    document.body.appendChild(toast);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        regRef = reg;
+
+        // 情况1：已有等待中的 SW（用户上次忽略了更新）
+        if (reg.waiting) {
+          showUpdateToast();
+          return;
+        }
+
+        // 情况2：检测到新 SW 正在安装
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+
+    // 情况3：SW 发来消息（NEW_VERSION_READY）
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'NEW_VERSION_READY') {
+        showUpdateToast();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
