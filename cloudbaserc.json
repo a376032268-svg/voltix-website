@@ -1,0 +1,13 @@
+{
+  "envId": "voltix-prod-d9gpbrzsm7e719fc5",
+  "functionRoot": "./cloudfunctions",
+  "functions": [
+    {
+      "name": "sendSmsNotify",
+      "timeout": 10,
+      "memorySize": 128,
+      "runtime": "Nodejs16.13",
+      "handler": "index.main"
+    }
+  ]
+}
