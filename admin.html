@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台 - Voltix · 伏特前行</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='96' fill='%230a0c20'/%3E%3Ctext x='100' y='116' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-size='102' font-weight='700' fill='%236366f1'%3EV%3C/text%3E%3C/svg%3E">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      line-height: 1.6;
+    }
+
+    /* 登录面板 */
+    .login-panel {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .login-box {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+    }
+
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 24px;
+      color: #0f172a;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    .login-box input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 14px;
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-box button:hover {
+      background: #059669;
+    }
+
+    .login-box .error {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .login-back {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .login-back a {
+      color: #10b981;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .login-back a:hover {
+      text-decoration: underline;
+    }
+
+    /* 广字型布局 */
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* 左侧边栏 */
+    .admin-sidebar {
+      width: 220px;
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+
+    .sidebar-brand-logo {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 14px rgba(99,102,241,0.7));
+    }
+
+    .sidebar-brand-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .sidebar-brand-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .sidebar-brand-slogan {
+      font-size: 11px;
+      color: rgba(99,102,241,0.85);
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 16px 12px;
+      flex: 1;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 4px;
+    }
+
+    .sidebar-menu li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+
+    .sidebar-menu li a:hover {
+      background: rgba(255,255,255,0.08);
+      color: white;
+    }
+
+    .sidebar-menu li a.active {
+      background: rgba(16,185,129,0.2);
+      color: #10b981;
+    }
+
+    .sidebar-menu li a .menu-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-back-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0 12px 16px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(99,102,241,0.35);
+      color: rgba(99,102,241,0.85);
+      font-size: 13px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .sidebar-back-btn:hover {
+      background: rgba(99,102,241,0.12);
+      color: #818cf8;
+    }
+
+    /* 右侧主内容区 */
+    .admin-main {
+      flex: 1;
+      margin-left: 220px;
+      min-height: 100vh;
+      background: #f1f5f9;
+    }
+
+    /* 顶部头部 */
+    .admin-main-header {
+      background: white;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .admin-main-header h1 {
+      font-size: 22px;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* 导出按钮 - 白色背景 + 绿色边框 */
+    .btn-export {
+      background: white;
+      color: #059669;
+      border: 2px solid #059669;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-export:hover {
+      background: #059669;
+      color: white;
+    }
+
+    /* 退出按钮 - 白色背景 + 红色边框 */
+    .btn-logout {
+      background: white;
+      color: #ef4444;
+      border: 2px solid #ef4444;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-logout:hover {
+      background: #ef4444;
+      color: white;
+    }
+
+    /* Toast 提示 */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 3000;
+      animation: slideIn 0.3s ease;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+
+    .toast-success {
+      background: #d1fae5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+
+    .toast-error {
+      background: #fee2e2;
+      color: #ef4444;
+      border: 1px solid #fecaca;
+    }
+
+    .toast-info {
+      background: #dbeafe;
+      color: #3b82f6;
+      border: 1px solid #bfdbfe;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+
+    /* 主内容区域 */
+    .admin-content {
+      padding: 32px;
+    }
+
+    /* 统计卡片 */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-card h3 {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .stat-card .number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .stat-card .stat-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    /* 内容卡片 */
+    .content-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    /* 面板容器 */
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-panel.active {
+      display: block;
+    }
+
+    /* 工具栏 */
+    .admin-toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .admin-toolbar input {
+      padding: 10px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      min-width: 200px;
+    }
+
+    .admin-toolbar input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+
+    .btn-refresh {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-refresh:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* 按钮组样式（替代 select） */
+    .btn-group {
+      display: inline-flex;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid #e2e8f0;
+    }
+
+    .btn-group .btn-filter {
+      padding: 10px 16px;
+      border: none;
+      background: white;
+      font-size: 13px;
+      font-weight: 500;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-right: 1px solid #e2e8f0;
+    }
+
+    .btn-group .btn-filter:last-child {
+      border-right: none;
+    }
+
+    .btn-group .btn-filter:hover {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .btn-group .btn-filter.active {
+      background: #10b981;
+      color: white;
+    }
+
+    /* 数据表格 */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .data-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #64748b;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .data-table tr:hover {
+      background: #f8fafc;
+    }
+
+    /* 状态标签 */
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #d97706;
+    }
+
+    .status-approved {
+      background: #d1fae5;
+      color: #059669;
+    }
+
+    .status-rejected {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    /* 操作按钮 */
+    .data-table .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-action {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-view {
+      background: #e0e7ff;
+      color: #4f46e5;
+    }
+
+    .btn-view:hover {
+      background: #c7d2fe;
+    }
+
+    .btn-edit {
+      background: #fef3c7;
+      color: #d97706;
+    }
+
+    .btn-edit:hover {
+      background: #fde68a;
+    }
+
+    .btn-approve {
+      background: #d1fae5;
+      color: #059669;
+    }
+
+    .btn-approve:hover {
+      background: #a7f3d0;
+    }
+
+    .btn-reject {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .btn-reject:hover {
+      background: #fecaca;
+    }
+
+    /* 详情弹窗 */
+    .detail-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .detail-modal.active {
+      display: flex;
+    }
+
+    .detail-content {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .detail-content h3 {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #f1f5f9;
+      font-size: 20px;
+      color: #0f172a;
+      text-align: center;
+    }
+
+    /* 两列布局 */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 32px;
+    }
+
+    .detail-row {
+      display: flex;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .detail-row-full {
+      grid-column: 1 / -1;
+    }
+
+    .detail-label {
+      width: 100px;
+      color: #64748b;
+      font-size: 14px;
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+
+    .detail-value {
+      flex: 1;
+      color: #0f172a;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 2px solid #f1f5f9;
+      justify-content: center;
+    }
+
+    /* 弹窗内按钮样式 - 底部居中彩色按钮 */
+    .btn-primary-modal {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-primary-modal:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-danger-modal {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger-modal:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-close-modal {
+      background: #f1f5f9;
+      color: #64748b;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-close-modal:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+      transform: translateY(-2px);
+    }
+
+    /* 编辑表单样式 */
+    .edit-form {
+      margin-top: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 2px solid #f1f5f9;
+    }
+
+    /* 空状态 */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #94a3b8;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    /* 响应式布局 */
+    @media (max-width: 1024px) {
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admin-sidebar {
+        width: 100%;
+        position: relative;
+        flex-direction: row;
+        padding: 12px;
+      }
+
+      .admin-main {
+        margin-left: 0;
+      }
+
+      .admin-main-header {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .admin-content {
+        padding: 16px;
+      }
+
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-group {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .btn-group .btn-filter {
+        flex: 1;
+        min-width: 80px;
+        text-align: center;
+      }
+
+      .data-table {
+        font-size: 12px;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 10px 8px;
+      }
+
+      .data-table .actions {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@latest/dist/index.umd.js"></script>
+  <script src="cloudbase-init.js?v=1.1.0"></script>
+</head>
+<body>
+
+  <!-- 登录面板 -->
+  <div class="login-panel" id="loginPanel">
+      <div class="login-box">
+        <h2>🔐 管理后台登录</h2>
+        <input type="password" id="adminPassword" placeholder="请输入管理员密码" onkeypress="if(event.key==='Enter')checkAdmin()">
+        <button onclick="checkAdmin()" id="loginBtn">登录</button>
+        <div class="error" id="loginError"></div>
+        <p style="text-align:center;font-size:12px;color:#94a3b8;margin-top:10px;">Origin0</p>
+        <div class="login-back">
+          <a href="index.html">← 返回首页</a>
+        </div>
+      </div>
+  </div>
+
+  <!-- 管理面板 - 广字型布局 -->
+  <div class="admin-layout" id="adminContainer" style="display:none;">
+
+    <!-- 左侧边栏 -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <svg class="sidebar-brand-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="sbBg" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#111530"/>
+                <stop offset="100%" stop-color="#0a0c20"/>
+              </radialGradient>
+              <linearGradient id="sbVg" x1="20%" y1="0%" x2="80%" y2="100%">
+                <stop offset="0%" stop-color="#f0f4ff"/>
+                <stop offset="45%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#a5b4fc"/>
+              </linearGradient>
+              <filter id="sbGl">
+                <feGaussianBlur stdDeviation="5.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <circle cx="100" cy="100" r="96" fill="url(#sbBg)" stroke="#4338ca" stroke-width="1.8"/>
+            <ellipse cx="100" cy="100" rx="74" ry="26" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="12,6" opacity="0.6"/>
+            <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="12,6" opacity="0.6" transform="rotate(35 100 100)"/>
+            <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#818cf8" stroke-width="1.6" stroke-dasharray="8,9" opacity="0.38" transform="rotate(-35 100 100)"/>
+            <circle cx="174" cy="100" r="5" fill="#818cf8" opacity="0.9"/>
+            <circle cx="100" cy="26" r="4" fill="#6366f1" opacity="0.9"/>
+            <circle cx="43" cy="144" r="3.5" fill="#4f46e5" opacity="0.85"/>
+            <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="#6366f1" opacity="0.22" letter-spacing="-2">V</text>
+            <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="url(#sbVg)" filter="url(#sbGl)" letter-spacing="-2" opacity="0.97">V</text>
+          </svg>
+          <div class="sidebar-brand-text">
+            <span class="sidebar-brand-name">Voltix · 伏特前行</span>
+            <span class="sidebar-brand-slogan">极致电能，驱动未来</span>
+          </div>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="#" id="menu-applications" class="active" onclick="switchMenu('applications', this); return false;">
+            <span class="menu-icon">📋</span>
+            合作申请
+          </a>
+        </li>
+        <li>
+          <a href="#" id="menu-contacts" onclick="switchMenu('contacts', this); return false;">
+            <span class="menu-icon">📞</span>
+            联系我们
+          </a>
+        </li>
+        <li>
+          <a href="#" id="menu-users" onclick="switchMenu('users', this); return false;">
+            <span class="menu-icon">👥</span>
+            注册用户
+          </a>
+        </li>
+      </ul>
+      <a href="index.html" target="_blank" class="sidebar-back-btn">🌐 回到官网</a>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="admin-main">
+      <!-- 顶部头部 -->
+      <header class="admin-main-header">
+        <h1 id="pageTitle">合作申请</h1>
+        <div class="header-actions">
+          <button class="btn-export" onclick="exportData()">📥 导出数据</button>
+          <button class="btn-logout" onclick="logoutAdmin()">🚪 退出登录</button>
+        </div>
+      </header>
+
+      <!-- 主内容 -->
+      <div class="admin-content">
+
+        <!-- 统计卡片 -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <h3>合作申请</h3>
+            <div class="number" id="statApplications">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <h3>待审核</h3>
+            <div class="number" id="statPending">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <h3>已通过</h3>
+            <div class="number" id="statApproved">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📞</div>
+            <h3>咨询数量</h3>
+            <div class="number" id="statContacts">0</div>
+          </div>
+        </div>
+
+        <!-- 内容卡片 -->
+        <div class="content-card">
+
+          <!-- 合作申请面板 -->
+          <div class="admin-panel active" id="panel-applications">
+            <div style="padding: 24px;">
+              <div class="admin-toolbar">
+                <input type="text" id="appSearch" placeholder="搜索公司名称/电话..." oninput="filterApplications()">
+                <div class="btn-group" id="appStatusGroup">
+                  <button class="btn-filter active" onclick="setAppStatusFilter('', this)">全部</button>
+                  <button class="btn-filter" onclick="setAppStatusFilter('pending', this)">审核中</button>
+                  <button class="btn-filter" onclick="setAppStatusFilter('approved', this)">已通过</button>
+                  <button class="btn-filter" onclick="setAppStatusFilter('rejected', this)">已拒绝</button>
+                </div>
+                <button class="btn-refresh" onclick="refreshData()">🔄 刷新</button>
+              </div>
+              <div id="applicationsTable"></div>
+            </div>
+          </div>
+
+          <!-- 联系我们面板 -->
+          <div class="admin-panel" id="panel-contacts">
+            <div style="padding: 24px;">
+              <div class="admin-toolbar">
+                <input type="text" id="contactSearch" placeholder="搜索姓名/电话..." oninput="filterContacts()">
+                <div class="btn-group" id="contactTypeGroup">
+                  <button class="btn-filter active" onclick="setContactTypeFilter('', this)">全部</button>
+                  <button class="btn-filter" onclick="setContactTypeFilter('purchase', this)">购买咨询</button>
+                  <button class="btn-filter" onclick="setContactTypeFilter('partnership', this)">场地合作</button>
+                  <button class="btn-filter" onclick="setContactTypeFilter('invest', this)">投资合作</button>
+                  <button class="btn-filter" onclick="setContactTypeFilter('tech', this)">技术支持</button>
+                  <button class="btn-filter" onclick="setContactTypeFilter('other', this)">其他</button>
+                </div>
+                <button class="btn-refresh" onclick="refreshData()">🔄 刷新</button>
+              </div>
+              <div id="contactsTable"></div>
+            </div>
+          </div>
+
+          <!-- 注册用户面板 -->
+          <div class="admin-panel" id="panel-users">
+            <div style="padding: 24px;">
+              <div class="admin-toolbar">
+                <input type="text" id="userSearch" placeholder="搜索姓名/邮箱/公司..." oninput="filterUsers()">
+                <button class="btn-refresh" onclick="refreshData()">🔄 刷新</button>
+              </div>
+              <div id="usersTable"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 详情弹窗 -->
+  <div class="detail-modal" id="detailModal">
+    <div class="detail-content" id="detailContent"></div>
+  </div>
+
+<script src="admin.js?v=1.5.0"></script>
+<script>
+(function() {
+  let regRef = null;
+
+  function showUpdateToast() {
+    if (document.getElementById('sw-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'sw-update-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 28px;border-radius:999px;z-index:99999;cursor:pointer;font-size:14px;font-weight:500;box-shadow:0 8px 30px rgba(16,185,129,0.4);letter-spacing:0.5px;';
+    toast.innerHTML = '🎉 发现新版本，点击刷新';
+    toast.onclick = () => {
+      if (regRef && regRef.waiting) {
+        regRef.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    };
+    document.body.appendChild(toast);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        regRef = reg;
+        if (reg.waiting) { showUpdateToast(); return; }
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'NEW_VERSION_READY') {
+        showUpdateToast();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
