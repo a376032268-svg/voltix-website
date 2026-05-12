@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于我们 - Voltix · 伏特前行</title>
+  <link rel="stylesheet" href="style.css?v=1.5.0">
+  <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@latest/dist/index.umd.js"></script>
+  <script src="cloudbase-init.js?v=1.0.0"></script>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;">
+        <img src="logo.svg" alt="Voltix" style="height:36px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));">
+        <span style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:1px;">Voltix · 伏特前行</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="products.html" class="nav-link">产品中心</a>
+        <a href="about.html" class="nav-link active">关于我们</a>
+        <a href="partnership.html" class="nav-link">合作申请</a>
+        <a href="contact.html" class="nav-link">联系我们</a>
+      </div>
+      <div class="nav-user" id="navUser">
+        <a href="login.html" class="nav-link">登录</a>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">首页</a>
+      <a href="products.html">产品中心</a>
+      <a href="about.html">关于我们</a>
+      <a href="partnership.html">合作申请</a>
+      <a href="contact.html">联系我们</a>
+      <a href="login.html" id="mobileLoginLink">登录</a>
+    </div>
+  </nav>
+
+  <!-- 页面顶部 -->
+  <section class="page-hero">
+    <h1>关于我们</h1>
+    <p>了解 Voltix 的品牌故事与使命愿景</p>
+  </section>
+
+  <!-- 公司简介 -->
+  <section class="about-section">
+    <div class="about-container">
+
+      <!-- 品牌标题 -->
+      <div style="text-align:center;margin-bottom:60px;">
+        <!-- Logo 在上 -->
+        <div style="display:flex;justify-content:center;margin-bottom:20px;">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="96" height="96">
+            <defs>
+              <radialGradient id="abBg" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#111530"/>
+                <stop offset="100%" stop-color="#0a0c20"/>
+              </radialGradient>
+              <linearGradient id="abVg" x1="20%" y1="0%" x2="80%" y2="100%">
+                <stop offset="0%" stop-color="#f0f4ff"/>
+                <stop offset="45%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#a5b4fc"/>
+              </linearGradient>
+              <filter id="abGl">
+                <feGaussianBlur stdDeviation="5.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <circle cx="100" cy="100" r="96" fill="url(#abBg)" stroke="#4338ca" stroke-width="1.8"/>
+            <ellipse cx="100" cy="100" rx="74" ry="26" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="12,6" opacity="0.6"/>
+            <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="12,6" opacity="0.6" transform="rotate(35 100 100)"/>
+            <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#818cf8" stroke-width="1.6" stroke-dasharray="8,9" opacity="0.38" transform="rotate(-35 100 100)"/>
+            <circle cx="174" cy="100" r="5" fill="#818cf8" opacity="0.9"/>
+            <circle cx="100" cy="26" r="4" fill="#6366f1" opacity="0.9"/>
+            <circle cx="43" cy="144" r="3.5" fill="#4f46e5" opacity="0.85"/>
+            <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="#6366f1" opacity="0.22" letter-spacing="-2">V</text>
+            <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="url(#abVg)" filter="url(#abGl)" letter-spacing="-2" opacity="0.97">V</text>
+          </svg>
+        </div>
+        <!-- 文字+slogan 在下 -->
+        <div style="font-size:32px;font-weight:900;letter-spacing:6px;color:#0f172a;margin-bottom:6px;">VOLTIX</div>
+        <div style="font-size:13px;color:#6366f1;letter-spacing:3px;margin-bottom:20px;">伏特前行</div>
+        <div style="width:60px;height:3px;background:linear-gradient(90deg,#6366f1,#818cf8);margin:0 auto;border-radius:2px;"></div>
+      </div>
+
+      <!-- 公司简介卡片 -->
+      <div class="about-intro-card">
+        <div class="about-label">公司及品牌简介</div>
+        <div class="about-intro-card p">
+          <strong>Voltix · 伏特前行</strong> 是一家专注于<strong>电动汽车共享充电基础设施</strong>的创新科技企业。公司总部位于浙江省杭州市，致力于通过自主研发的<strong>去中心化 BLE Mesh 智能充电系统</strong>，解决居民小区充电桩资源紧张、安装困难的行业痛点。
+          <br><br>
+          我们的核心产品 <strong>Voltix 智能充电桩</strong>采用自研通信协议，支持多台充电桩自组网、智能排队充电，无需中央控制器即可实现分布式管理。产品已通过小批量实地测试验证，现处于天使轮融资阶段，计划融资 200 万元人民币用于量产及首批站点部署。
+          <br><br>
+          品牌名 <strong>Voltix</strong> 源自 "Volt（伏特）+ IX（罗马数字9/科技后缀）"，寓意"极致电能"。中文名"伏特前行"既呼应电压单位，又象征电动汽车时代的前行力量。品牌 Slogan "极致电能，驱动未来"体现了我们推动清洁能源普及、助力碳中和目标的使命愿景。
+        </div>
+        <div class="about-meta">
+          <div class="meta-item"><strong>品牌名称</strong>Voltix / 伏特前行</div>
+          <div class="meta-item"><strong>品牌 Slogan</strong>极致电能，驱动未来</div>
+          <div class="meta-item"><strong>所属行业</strong>新能源 / 电动汽车充电设施</div>
+          <div class="meta-item"><strong>总部地址</strong>浙江省杭州市</div>
+          <div class="meta-item"><strong>创始人</strong>刘潇辉</div>
+          <div class="meta-item"><strong>当前阶段</strong>天使轮融资 / 产品量产准备</div>
+        </div>
+      </div>
+
+      <!-- 品牌 Logo 展示 -->
+      <div style="margin-top:60px;">
+        <h2 style="text-align:center;font-size:24px;margin-bottom:36px;">品牌 Logo</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;">
+
+          <!-- 主方案·深空紫 -->
+          <div style="background:white;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+            <div style="width:140px;height:140px;margin:0 auto 16px;background:#0a0c20;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="110" height="110">
+                <defs>
+                  <radialGradient id="lgA_bg" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#111530"/>
+                    <stop offset="100%" stop-color="#0a0c20"/>
+                  </radialGradient>
+                  <linearGradient id="lgA_vg" x1="20%" y1="0%" x2="80%" y2="100%">
+                    <stop offset="0%" stop-color="#f0f4ff"/>
+                    <stop offset="45%" stop-color="#ffffff"/>
+                    <stop offset="100%" stop-color="#a5b4fc"/>
+                  </linearGradient>
+                  <filter id="lgA_gl">
+                    <feGaussianBlur stdDeviation="5.5" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <circle cx="100" cy="100" r="96" fill="url(#lgA_bg)" stroke="#4338ca" stroke-width="1.8"/>
+                <ellipse cx="100" cy="100" rx="74" ry="26" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="12,6" opacity="0.65"/>
+                <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="12,6" opacity="0.65" transform="rotate(35 100 100)"/>
+                <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#818cf8" stroke-width="1.6" stroke-dasharray="8,9" opacity="0.38" transform="rotate(-35 100 100)"/>
+                <circle cx="174" cy="100" r="5" fill="#818cf8" opacity="0.9"/>
+                <circle cx="100" cy="26" r="4" fill="#6366f1" opacity="0.9"/>
+                <circle cx="43" cy="144" r="3.5" fill="#4f46e5" opacity="0.85"/>
+                <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="#6366f1" opacity="0.22" letter-spacing="-2">V</text>
+                <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="url(#lgA_vg)" filter="url(#lgA_gl)" letter-spacing="-2" opacity="0.97">V</text>
+              </svg>
+            </div>
+            <div style="font-size:13px;color:#6366f1;font-weight:600;">主方案 · 深空紫</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">商标申请推荐</div>
+          </div>
+
+          <!-- 白底黑字版 -->
+          <div style="background:white;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+            <div style="width:140px;height:140px;margin:0 auto 16px;background:white;border-radius:12px;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="110" height="110">
+                <defs>
+                  <linearGradient id="lgB_vg" x1="20%" y1="0%" x2="80%" y2="100%">
+                    <stop offset="0%" stop-color="#374151"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                  </linearGradient>
+                  <filter id="lgB_gl">
+                    <feGaussianBlur stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <circle cx="100" cy="100" r="96" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+                <ellipse cx="100" cy="100" rx="74" ry="26" fill="none" stroke="#334155" stroke-width="1.8" stroke-dasharray="12,6" opacity="0.5"/>
+                <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#475569" stroke-width="1.8" stroke-dasharray="12,6" opacity="0.5" transform="rotate(35 100 100)"/>
+                <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#64748b" stroke-width="1.4" stroke-dasharray="8,9" opacity="0.3" transform="rotate(-35 100 100)"/>
+                <circle cx="174" cy="100" r="4.5" fill="#334155" opacity="0.8"/>
+                <circle cx="100" cy="26" r="3.5" fill="#475569" opacity="0.8"/>
+                <circle cx="43" cy="144" r="3" fill="#1e293b" opacity="0.75"/>
+                <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="#0f172a" opacity="0.15" letter-spacing="-2">V</text>
+                <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="url(#lgB_vg)" filter="url(#lgB_gl)" letter-spacing="-2" opacity="0.95">V</text>
+              </svg>
+            </div>
+            <div style="font-size:13px;color:#0f172a;font-weight:600;">白底黑字版</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">商标申请必备</div>
+          </div>
+
+          <!-- 黑底白字版 -->
+          <div style="background:white;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+            <div style="width:140px;height:140px;margin:0 auto 16px;background:#0f172a;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="110" height="110">
+                <defs>
+                  <radialGradient id="lgC_bg" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                  </radialGradient>
+                  <linearGradient id="lgC_vg" x1="20%" y1="0%" x2="80%" y2="100%">
+                    <stop offset="0%" stop-color="#f8fafc"/>
+                    <stop offset="50%" stop-color="#ffffff"/>
+                    <stop offset="100%" stop-color="#cbd5e1"/>
+                  </linearGradient>
+                  <filter id="lgC_gl">
+                    <feGaussianBlur stdDeviation="5" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <circle cx="100" cy="100" r="96" fill="url(#lgC_bg)" stroke="#334155" stroke-width="1.8"/>
+                <ellipse cx="100" cy="100" rx="74" ry="26" fill="none" stroke="#475569" stroke-width="1.8" stroke-dasharray="12,6" opacity="0.55"/>
+                <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#64748b" stroke-width="1.8" stroke-dasharray="12,6" opacity="0.55" transform="rotate(35 100 100)"/>
+                <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="8,9" opacity="0.32" transform="rotate(-35 100 100)"/>
+                <circle cx="174" cy="100" r="4.5" fill="#94a3b8" opacity="0.85"/>
+                <circle cx="100" cy="26" r="3.5" fill="#64748b" opacity="0.85"/>
+                <circle cx="43" cy="144" r="3" fill="#475569" opacity="0.8"/>
+                <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="#94a3b8" opacity="0.18" letter-spacing="-2">V</text>
+                <text x="100" y="116" text-anchor="middle" dominant-baseline="middle" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-size="102" font-weight="700" fill="url(#lgC_vg)" filter="url(#lgC_gl)" letter-spacing="-2" opacity="0.97">V</text>
+              </svg>
+            </div>
+            <div style="font-size:13px;color:#0f172a;font-weight:600;">黑底白字版</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">深色场景应用</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 商标信息 -->
+      <div class="about-intro-card" style="margin-top:60px;">
+        <div class="about-label">商标申请信息</div>
+        <table style="width:100%;border-collapse:collapse;font-size:14px;">
+          <tr><td style="padding:12px 0;color:#64748b;width:140px;border-bottom:1px solid #e2e8f0;">商标名称</td><td style="padding:12px 0;border-bottom:1px solid #e2e8f0;">Voltix（英文）/ 伏特前行（中文）</td></tr>
+          <tr><td style="padding:12px 0;color:#64748b;border-bottom:1px solid #e2e8f0;">品牌 Slogan</td><td style="padding:12px 0;border-bottom:1px solid #e2e8f0;">极致电能，驱动未来</td></tr>
+          <tr><td style="padding:12px 0;color:#64748b;border-bottom:1px solid #e2e8f0;">域名</td><td style="padding:12px 0;border-bottom:1px solid #e2e8f0;">VoltixGo.com（已确认可注册）</td></tr>
+          <tr><td style="padding:12px 0;color:#64748b;border-bottom:1px solid #e2e8f0;">申请类别</td><td style="padding:12px 0;border-bottom:1px solid #e2e8f0;">
+            <span style="display:inline-block;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;margin-right:6px;">第9类</span>科学仪器及设备
+            <br><span style="display:inline-block;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;margin-right:6px;margin-top:6px;">第37类</span>建筑、修缮及安装服务
+            <br><span style="display:inline-block;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;margin-right:6px;margin-top:6px;">第42类</span>科技及软件服务
+          </td></tr>
+          <tr><td style="padding:12px 0;color:#64748b;">申请人</td><td style="padding:12px 0;">刘潇辉（自然人）</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.svg" alt="Voltix" style="height:32px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));margin-bottom:12px;">
+          <p>极致电能，驱动未来</p>
+        </div>
+        <div class="footer-links">
+          <h4>快速链接</h4>
+          <a href="index.html">首页</a>
+          <a href="products.html">产品中心</a>
+          <a href="about.html">关于我们</a>
+          <a href="partnership.html">合作申请</a>
+          <a href="changelog.html">更新日志</a>
+        </div>
+        <div class="footer-contact">
+          <h4>联系我们</h4>
+          <p>📱 电话：132-2100-2280</p>
+          <p>📧 邮箱：liuxiaohui628@163.com</p>
+          <p>📍 地址：浙江省杭州市</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Voltix · 伏特前行. All rights reserved.</p>
+      </div>
+    </div>
+  <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:8px;">⚙ <a href="admin.html" target="_blank" style="color:#cbd5e1;text-decoration:none;">管理后台</a></p>
+    </footer>
+
+  <script src="nav-user.js?v=1.5.0"></script>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) { nav.classList.add('scrolled'); }
+      else { nav.classList.remove('scrolled'); }
+    });
+  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+}
+</script>
+
+<script>
+// Voltix SW 更新提示 v1.4.1
+(function() {
+  let regRef = null;
+
+  function showUpdateToast() {
+    if (document.getElementById('sw-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'sw-update-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 28px;border-radius:999px;z-index:99999;cursor:pointer;font-size:14px;font-weight:500;box-shadow:0 8px 30px rgba(16,185,129,0.4);letter-spacing:0.5px;';
+    toast.innerHTML = '🎉 发现新版本，点击刷新';
+    toast.onclick = () => {
+      if (regRef && regRef.waiting) {
+        regRef.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    };
+    document.body.appendChild(toast);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        regRef = reg;
+
+        // 情况1：已有等待中的 SW（用户上次忽略了更新）
+        if (reg.waiting) {
+          showUpdateToast();
+          return;
+        }
+
+        // 情况2：检测到新 SW 正在安装
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+
+    // 情况3：SW 发来消息（NEW_VERSION_READY）
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'NEW_VERSION_READY') {
+        showUpdateToast();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
