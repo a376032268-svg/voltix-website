@@ -1,0 +1,30 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <radialGradient id="bgMain" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#111530"/>
+            <stop offset="100%" stop-color="#0a0c20"/>
+        </radialGradient>
+        <linearGradient id="vgMain" x1="20%" y1="0%" x2="80%" y2="100%">
+            <stop offset="0%" stop-color="#f0f4ff"/>
+            <stop offset="45%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#a5b4fc"/>
+        </linearGradient>
+        <filter id="glMain">
+            <feGaussianBlur stdDeviation="5.5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+    </defs>
+    <circle cx="100" cy="100" r="96" fill="url(#bgMain)" stroke="#4338ca" stroke-width="1.8"/>
+    <ellipse cx="100" cy="100" rx="74" ry="26" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="12,6" opacity="0.6"/>
+    <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="12,6" opacity="0.6" transform="rotate(35 100 100)"/>
+    <ellipse cx="100" cy="100" rx="26" ry="74" fill="none" stroke="#818cf8" stroke-width="1.6" stroke-dasharray="8,9" opacity="0.38" transform="rotate(-35 100 100)"/>
+    <circle cx="174" cy="100" r="5" fill="#818cf8" opacity="0.9"/>
+    <circle cx="100" cy="26" r="4" fill="#6366f1" opacity="0.9"/>
+    <circle cx="43" cy="144" r="3.5" fill="#4f46e5" opacity="0.85"/>
+    <text x="100" y="116" text-anchor="middle" dominant-baseline="middle"
+        font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif"
+        font-size="102" font-weight="700" fill="#6366f1" opacity="0.22" letter-spacing="-2">V</text>
+    <text x="100" y="116" text-anchor="middle" dominant-baseline="middle"
+        font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif"
+        font-size="102" font-weight="700" fill="url(#vgMain)" filter="url(#glMain)" letter-spacing="-2" opacity="0.97">V</text>
+</svg>
