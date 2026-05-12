@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>立即购买 - Voltix · 伏特前行</title>
+  <link rel="stylesheet" href="style.css?v=1.5.0">
+  <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@latest/dist/index.umd.js"></script>
+  <script src="cloudbase-init.js?v=1.2.0"></script>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;">
+        <img src="logo.svg" alt="Voltix" style="height:36px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));">
+        <span style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:1px;">Voltix · 伏特前行</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="products.html" class="nav-link">产品中心</a>
+        <a href="about.html" class="nav-link">关于我们</a>
+        <a href="partnership.html" class="nav-link">合作申请</a>
+        <a href="contact.html" class="nav-link">联系我们</a>
+      </div>
+      <div class="nav-user" id="navUser">
+        <a href="login.html" class="nav-link">登录</a>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">首页</a>
+      <a href="products.html">产品中心</a>
+      <a href="about.html">关于我们</a>
+      <a href="partnership.html">合作申请</a>
+      <a href="contact.html">联系我们</a>
+      <a href="login.html" id="mobileLoginLink">登录</a>
+    </div>
+  </nav>
+
+  <!-- 页面顶部 -->
+  <section class="page-hero">
+    <h1>立即购买</h1>
+    <p>简单四步，完成购买</p>
+  </section>
+
+  <!-- 步骤指示器 -->
+  <section style="padding:40px 20px 0;background:#f8fafc;">
+    <div style="max-width:700px;margin:0 auto;display:flex;justify-content:space-between;position:relative;">
+      <div style="flex:1;text-align:center;position:relative;z-index:2;" id="stepTab1">
+        <div style="width:40px;height:40px;background:#10b981;color:white;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:8px;" id="stepNum1">1</div>
+        <div style="font-size:13px;color:#10b981;font-weight:600;" id="stepLabel1">确认产品</div>
+      </div>
+      <div style="flex:1;text-align:center;position:relative;z-index:2;" id="stepTab2">
+        <div style="width:40px;height:40px;background:#e2e8f0;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:8px;" id="stepNum2">2</div>
+        <div style="font-size:13px;color:#94a3b8;" id="stepLabel2">填写信息</div>
+      </div>
+      <div style="flex:1;text-align:center;position:relative;z-index:2;" id="stepTab3">
+        <div style="width:40px;height:40px;background:#e2e8f0;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:8px;" id="stepNum3">3</div>
+        <div style="font-size:13px;color:#94a3b8;" id="stepLabel3">支付订单</div>
+      </div>
+      <div style="flex:1;text-align:center;position:relative;z-index:2;" id="stepTab4">
+        <div style="width:40px;height:40px;background:#e2e8f0;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:8px;" id="stepNum4">4</div>
+        <div style="font-size:13px;color:#94a3b8;" id="stepLabel4">完成</div>
+      </div>
+      <!-- 进度线 -->
+      <div style="position:absolute;top:20px;left:0;right:0;height:3px;background:#e2e8f0;z-index:1;">
+        <div style="height:100%;background:#10b981;width:0%;transition:width 0.5s;" id="stepBar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 步骤1：确认产品 -->
+  <section style="padding:48px 20px 80px;background:#f8fafc;" id="step1">
+    <div style="max-width:600px;margin:0 auto;background:white;border-radius:20px;padding:48px 40px;box-shadow:0 4px 30px rgba(0,0,0,0.06);">
+      <h2 style="font-size:22px;margin-bottom:28px;">确认产品信息</h2>
+      <div style="display:flex;align-items:center;gap:20px;padding:24px;background:#f8fafc;border-radius:16px;margin-bottom:32px;">
+        <div style="font-size:56px;">⚡</div>
+        <div>
+          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Voltix 智能充电桩</div>
+          <div style="font-size:13px;color:#64748b;margin-bottom:8px;">DARWATT-PILE-7K · 7kW交流充电</div>
+          <div style="font-size:28px;font-weight:700;color:#10b981;">¥3,800 <span style="font-size:14px;font-weight:400;color:#64748b;">/台（含安装）</span></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>购买数量（台）*</label>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <button type="button" onclick="changeQty(-1)" style="width:44px;height:44px;border-radius:10px;border:2px solid #e2e8f0;background:white;font-size:20px;cursor:pointer;">−</button>
+          <span id="qty" style="font-size:24px;font-weight:700;min-width:40px;text-align:center;">1</span>
+          <button type="button" onclick="changeQty(1)" style="width:44px;height:44px;border-radius:10px;border:2px solid #e2e8f0;background:White;font-size:20px;cursor:pointer;">+</button>
+          <span style="margin-left:auto;font-size:18px;color:#0f172a;" id="totalPrice">总价：¥3,800</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:16px;font-size:16px;margin-top:12px;" onclick="goStep(2)">下一步：填写信息 →</button>
+    </div>
+  </section>
+
+  <!-- 步骤2：填写信息 -->
+  <section style="padding:48px 20px 80px;background:#f8fafc;display:none;" id="step2">
+    <div style="max-width:600px;margin:0 auto;background:white;border-radius:20px;padding:48px 40px;box-shadow:0 4px 30px rgba(0,0,0,0.06);">
+      <h2 style="font-size:22px;margin-bottom:28px;">填写联系与安装信息</h2>
+      <div class="form-group">
+        <label>姓名 *</label>
+        <input type="text" id="buyerName" required placeholder="请输入收货人姓名">
+      </div>
+      <div class="form-group">
+        <label>联系电话 *</label>
+        <input type="tel" id="buyerPhone" required placeholder="请输入手机号码">
+      </div>
+      <div class="form-group">
+        <label>安装地址 *</label>
+        <input type="text" id="installAddress" required placeholder="请输入详细安装地址">
+      </div>
+      <div class="form-group">
+        <label>备注信息</label>
+        <textarea id="buyerNote" rows="3" placeholder="如有特殊需求，请在此说明"></textarea>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:32px;">
+        <button class="btn" style="flex:1;padding:14px;font-size:15px;background:#f1f5f9;color:#475569;border:none;" onclick="goStep(1)">← 上一步</button>
+        <button class="btn btn-primary" style="flex:1;padding:14px;font-size:15px;" onclick="submitStep2()">下一步：支付订单 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 步骤3：支付订单（测试模式） -->
+  <section style="padding:48px 20px 80px;background:#f8fafc;display:none;" id="step3">
+    <div style="max-width:600px;margin:0 auto;background:white;border-radius:20px;padding:48px 40px;box-shadow:0 4px 30px rgba(0,0,0,0.06);text-align:center;">
+      <h2 style="font-size:22px;margin-bottom:8px;">订单已生成</h2>
+      <p style="color:#64748b;margin-bottom:32px;">请在 30 分钟内完成支付</p>
+
+      <div style="background:#f8fafc;border-radius:16px;padding:28px;margin-bottom:32px;text-align:left;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;">
+          <span style="color:#64748b;">订单编号</span>
+          <span style="font-weight:600;" id="orderId">-</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;">
+          <span style="color:#64748b;">产品</span>
+          <span id="orderProduct">Voltix 智能充电桩 × 1台</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:700;padding-top:12px;border-top:1px solid #e2e8f0;">
+          <span>应付金额</span>
+          <span style="color:#10b981;" id="orderTotal">¥3,800</span>
+        </div>
+      </div>
+
+      <!-- 测试模式提示 -->
+      <div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:12px;padding:16px;margin-bottom:32px;text-align:left;">
+        <div style="font-size:13px;color:#92400e;line-height:1.8;">
+          <strong>🔧 当前为测试模式</strong><br>
+          支付接口待接入（微信支付/支付宝）。<br>
+          点击下方按钮模拟支付成功，系统将自动创建订单并通知我们。
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;padding:18px;font-size:18px;" onclick="simulatePay()">
+        🔒 模拟支付成功
+      </button>
+      <button class="btn" style="width:100%;padding:14px;font-size:14px;background:transparent;color:#64748b;border:none;margin-top:12px;" onclick="goStep(2)">← 返回修改信息</button>
+    </div>
+  </section>
+
+  <!-- 步骤4：完成 -->
+  <section style="padding:48px 20px 80px;background:#f8fafc;display:none;" id="step4">
+    <div style="max-width:600px;margin:0 auto;background:white;border-radius:20px;padding:60px 40px;box-shadow:0 4px 30px rgba(0,0,0,0.06);text-align:center;">
+      <div style="font-size:72px;margin-bottom:24px;">🎉</div>
+      <h2 style="font-size:26px;margin-bottom:12px;color:#059669;">支付成功！</h2>
+      <p style="color:#64748b;margin-bottom:36px;">订单已创建，我们会尽快与您联系安排安装。</p>
+
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:16px;padding:24px;margin-bottom:36px;text-align:left;">
+        <div style="font-size:14px;margin-bottom:8px;"><span style="color:#64748b;">订单编号：</span><strong id="finalOrderId">-</strong></div>
+        <div style="font-size:14px;margin-bottom:8px;"><span style="color:#64748b;">联系电话：</span><strong id="finalPhone">-</strong></div>
+        <div style="font-size:14px;"><span style="color:#64748b;">安装地址：</span><strong id="finalAddress">-</strong></div>
+      </div>
+
+      <div style="font-size:14px;color:#64748b;line-height:2;margin-bottom:36px;text-align:left;">
+        <p>📱 我们的工作人员会在 <strong>24小时内</strong> 与您联系</p>
+        <p>🔧 安装工程师会在 <strong>3个工作日内</strong> 上门勘测</p>
+        <p>⚡ 安装完成后即可开始使用</p>
+      </div>
+
+      <a href="index.html" class="btn btn-primary" style="display:inline-block;padding:14px 48px;font-size:16px;">返回首页</a>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.svg" alt="Voltix" style="height:32px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));margin-bottom:12px;">
+          <p>极致电能，驱动未来</p>
+        </div>
+        <div class="footer-links">
+          <h4>快速链接</h4>
+          <a href="index.html">首页</a>
+          <a href="products.html">产品中心</a>
+          <a href="about.html">关于我们</a>
+          <a href="partnership.html">合作申请</a>
+          <a href="changelog.html">更新日志</a>
+        </div>
+        <div class="footer-contact">
+          <h4>联系我们</h4>
+          <p>📱 电话：132-2100-2280</p>
+          <p>📧 邮箱：liuxiaohui628@163.com</p>
+          <p>📍 地址：浙江省杭州市</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Voltix · 伏特前行. All rights reserved.</p>
+      </div>
+    </div>
+  <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:8px;">⚙ <a href="admin.html" target="_blank" style="color:#cbd5e1;text-decoration:none;">管理后台</a></p>
+    </footer>
+
+  <script>
+    var currentQty = 1;
+    var currentOrderId = '';
+
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) { nav.classList.add('scrolled'); }
+      else { nav.classList.remove('scrolled'); }
+    });
+
+    function changeQty(delta) {
+      currentQty = Math.max(1, Math.min(20, currentQty + delta));
+      document.getElementById('qty').textContent = currentQty;
+      document.getElementById('totalPrice').textContent = '总价：¥' + (currentQty * 3800).toLocaleString();
+    }
+
+    function goStep(n) {
+      for (var i = 1; i <= 4; i++) {
+        document.getElementById('step' + i).style.display = (i === n) ? 'block' : 'none';
+        var num = document.getElementById('stepNum' + i);
+        var label = document.getElementById('stepLabel' + i);
+        if (i <= n) {
+          num.style.background = '#10b981';
+          num.style.color = 'white';
+          label.style.color = '#10b981';
+          label.style.fontWeight = '600';
+        } else {
+          num.style.background = '#e2e8f0';
+          num.style.color = '#94a3b8';
+          label.style.color = '#94a3b8';
+          label.style.fontWeight = '400';
+        }
+      }
+      document.getElementById('stepBar').style.width = ((n - 1) * 33.33) + '%';
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function submitStep2() {
+      var name = document.getElementById('buyerName').value;
+      var phone = document.getElementById('buyerPhone').value;
+      if (!name || !phone || !/^1[3-9]\d{9}$/.test(phone)) {
+        alert('请填写正确的姓名和手机号码');
+        return;
+      }
+      if (!document.getElementById('installAddress').value) {
+        alert('请填写安装地址');
+        return;
+      }
+      currentOrderId = 'VOLTIX' + Date.now().toString().slice(-8);
+      document.getElementById('orderId').textContent = currentOrderId;
+      document.getElementById('orderProduct').textContent = 'Voltix 智能充电桩 × ' + currentQty + '台';
+      document.getElementById('orderTotal').textContent = '¥' + (currentQty * 3800).toLocaleString();
+      goStep(3);
+    }
+
+    function simulatePay() {
+      var order = {
+        orderId: currentOrderId,
+        product: 'Voltix 智能充电桩',
+        qty: currentQty,
+        total: currentQty * 3800,
+        name: document.getElementById('buyerName').value,
+        phone: document.getElementById('buyerPhone').value,
+        address: document.getElementById('installAddress').value,
+        note: document.getElementById('buyerNote').value,
+        status: 'paid',
+        createTime: new Date().toISOString()
+      };
+      var orders = JSON.parse(localStorage.getItem('voltix_orders') || '[]');
+      orders.push(order);
+      localStorage.setItem('voltix_orders', JSON.stringify(orders));
+
+      document.getElementById('finalOrderId').textContent = currentOrderId;
+      document.getElementById('finalPhone').textContent = order.phone;
+      document.getElementById('finalAddress').textContent = order.address;
+      goStep(4);
+
+      console.log('【新订单】', order);
+    }
+
+  </script>
+<script src="nav-user.js?v=1.5.0"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+}
+</script>
+
+<script>
+// Voltix SW 更新提示 v1.4.1
+(function() {
+  let regRef = null;
+
+  function showUpdateToast() {
+    if (document.getElementById('sw-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'sw-update-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 28px;border-radius:999px;z-index:99999;cursor:pointer;font-size:14px;font-weight:500;box-shadow:0 8px 30px rgba(16,185,129,0.4);letter-spacing:0.5px;';
+    toast.innerHTML = '🎉 发现新版本，点击刷新';
+    toast.onclick = () => {
+      if (regRef && regRef.waiting) {
+        regRef.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    };
+    document.body.appendChild(toast);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        regRef = reg;
+
+        // 情况1：已有等待中的 SW（用户上次忽略了更新）
+        if (reg.waiting) {
+          showUpdateToast();
+          return;
+        }
+
+        // 情况2：检测到新 SW 正在安装
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+
+    // 情况3：SW 发来消息（NEW_VERSION_READY）
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'NEW_VERSION_READY') {
+        showUpdateToast();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
