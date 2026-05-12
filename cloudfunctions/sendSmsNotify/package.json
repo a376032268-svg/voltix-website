@@ -1,0 +1,9 @@
+{
+  "name": "sendSmsNotify",
+  "version": "1.0.0",
+  "description": "Voltix SMS Notification Cloud Function",
+  "main": "index.js",
+  "dependencies": {
+    "tencentcloud-sdk-nodejs": "^4.0.0"
+  }
+}
