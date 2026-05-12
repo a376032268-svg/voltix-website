@@ -6,8 +6,8 @@
   <title>登录/注册 - Voltix · 伏特前行</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='96' fill='%230a0c20'/%3E%3Ctext x='100' y='116' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-size='102' font-weight='700' fill='%236366f1'%3EV%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css?v=1.5.0">
-  <script src="https://static.cloudbase.net/js-sdk/latest/cloudbase.full.js"></script>
-  <script src="cloudbase-init.js?v=1.3.0"></script>
+  <script src="cloudbase-sdk.min.js"></script>
+  <script src="cloudbase-init.js?v=1.3.1"></script>
   <style>
     .auth-container {
       min-height: 100vh;
@@ -213,11 +213,11 @@
       <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
           <label>手机号码 *</label>
-          <input type="tel" id="loginPhone" required placeholder="请输入手机号码" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
+          <input type="tel" id="loginPhone" required placeholder="请输入手机号码" maxlength="11" autocomplete="off" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
         </div>
         <div class="form-group">
           <label>密码 *</label>
-          <input type="password" id="loginPassword" required placeholder="请输入密码" minlength="4">
+          <input type="password" id="loginPassword" required placeholder="请输入密码" minlength="4" autocomplete="new-password">
         </div>
         <div class="auth-msg" id="loginMsg"></div>
         <button type="submit" class="auth-btn" id="loginBtn">登录</button>
@@ -227,15 +227,15 @@
       <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
         <div class="form-group">
           <label>姓名 *</label>
-          <input type="text" id="regName" required placeholder="请输入您的真实姓名">
+          <input type="text" id="regName" required placeholder="请输入您的真实姓名" autocomplete="off">
         </div>
         <div class="form-group">
           <label>手机号码 *</label>
-          <input type="tel" id="regPhone" required placeholder="请输入手机号码" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
+          <input type="tel" id="regPhone" required placeholder="请输入手机号码" maxlength="11" autocomplete="off" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
         </div>
         <div class="form-group">
           <label>密码 *</label>
-          <input type="password" id="regPassword" required placeholder="请设置密码（至少4位）" minlength="4">
+          <input type="password" id="regPassword" required placeholder="请设置密码（至少4位）" minlength="4" autocomplete="new-password">
         </div>
         <div class="form-group">
           <label>电子邮箱 <span class="optional">选填</span></label>
