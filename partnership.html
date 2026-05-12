@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合作申请 - Voltix · 伏特前行</title>
+  <link rel="stylesheet" href="style.css?v=1.5.0">
+  <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@latest/dist/index.umd.js"></script>
+  <script src="cloudbase-init.js?v=1.2.0"></script>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;">
+        <img src="logo.svg" alt="Voltix" style="height:36px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));">
+        <span style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:1px;">Voltix · 伏特前行</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="products.html" class="nav-link">产品中心</a>
+        <a href="about.html" class="nav-link">关于我们</a>
+        <a href="partnership.html" class="nav-link active">合作申请</a>
+        <a href="contact.html" class="nav-link">联系我们</a>
+      </div>
+      <div class="nav-user" id="navUser">
+        <a href="login.html" class="nav-link">登录</a>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">首页</a>
+      <a href="products.html">产品中心</a>
+      <a href="about.html">关于我们</a>
+      <a href="partnership.html">合作申请</a>
+      <a href="contact.html">联系我们</a>
+      <a href="login.html" id="mobileLoginLink">登录</a>
+    </div>
+  </nav>
+
+  <!-- 页面顶部 -->
+  <section class="page-hero">
+    <h1>合作申请</h1>
+    <p>填写信息，开启智能充电合作之旅</p>
+  </section>
+
+  <!-- 表单区域 -->
+  <section class="form-section">
+    <div class="form-container" id="formContainer">
+      <h2 style="font-size:22px;margin-bottom:8px;">合作申请表单</h2>
+      <p style="color:#64748b;margin-bottom:32px;font-size:14px;">请填写以下信息，我们会在 3 个工作日内与您联系</p>
+
+      <form id="applyForm" onsubmit="submitForm(event)">
+
+        <div class="form-section-title">📋 基本信息</div>
+
+        <div class="form-group">
+          <label>公司/场所名称 *</label>
+          <input type="text" id="companyName" required placeholder="例如：某某物业管理有限公司">
+        </div>
+
+        <div class="form-group">
+            <label>场所类型</label>
+            <div class="company-type-grid">
+              <button type="button" class="company-type-btn selected" data-value="property" onclick="selectCompanyType(this)">
+                <span class="type-icon">🏢</span>
+                <span class="type-label">物业</span>
+              </button>
+              <button type="button" class="company-type-btn" data-value="hotel" onclick="selectCompanyType(this)">
+                <span class="type-icon">🏨</span>
+                <span class="type-label">酒店</span>
+              </button>
+              <button type="button" class="company-type-btn" data-value="mall" onclick="selectCompanyType(this)">
+                <span class="type-icon">🛍️</span>
+                <span class="type-label">商场</span>
+              </button>
+              <button type="button" class="company-type-btn" data-value="community" onclick="selectCompanyType(this)">
+                <span class="type-icon">🏘️</span>
+                <span class="type-label">社区</span>
+              </button>
+              <button type="button" class="company-type-btn" data-value="office" onclick="selectCompanyType(this)">
+                <span class="type-icon">🏣</span>
+                <span class="type-label">写字楼</span>
+              </button>
+              <button type="button" class="company-type-btn" data-value="other" onclick="selectCompanyType(this)">
+                <span class="type-icon">📋</span>
+                <span class="type-label">其他</span>
+              </button>
+            </div>
+            <input type="hidden" id="companyType" name="companyType" value="property">
+          </div>
+
+        <div class="form-row">
+          <div class="form-group" style="display:none;">
+            <label>占位</label>
+            <input type="text" disabled>
+          </div>
+          <div class="form-group">
+            <label>联系电话 *</label>
+            <input type="tel" id="contactPhone" required placeholder="请输入联系电话" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
+          </div>
+        </div>
+
+        <div class="form-section-title" style="margin-top:36px;">📐 场地信息</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>场地面积（㎡）</label>
+            <input type="number" id="siteArea" min="1" placeholder="例如：500" value="500">
+          </div>
+          <div class="form-group">
+            <label>申请桩数（个）</label>
+            <input type="number" id="pileCount" min="1" max="50" placeholder="例如：6" value="6">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>安装位置 *</label>
+          <div class="install-options">
+            <label class="install-option selected" onclick="selectInstall(this,'underground')" id="opt-underground">
+              <input type="radio" name="installType" value="underground" checked>
+              <div class="install-icon">🅱️</div>
+              <div class="install-text">
+                <div class="install-title">地下车库</div>
+                <div class="install-desc">推荐 · 支持安装</div>
+              </div>
+            </label>
+            <label class="install-option" onclick="selectInstall(this,'indoor')" id="opt-indoor">
+              <input type="radio" name="installType" value="indoor">
+              <div class="install-icon">🏢</div>
+              <div class="install-text">
+                <div class="install-title">室内停车场</div>
+                <div class="install-desc">支持安装</div>
+              </div>
+            </label>
+            <label class="install-option disabled" id="opt-outdoor">
+              <input type="radio" name="installType" value="outdoor" disabled>
+              <div class="install-icon">🌳</div>
+              <div class="install-text">
+                <div class="install-title">室外停车场</div>
+                <div class="install-desc">暂不支持</div>
+              </div>
+            </label>
+          </div>
+          <div id="installWarn" style="color:#ef4444;font-size:13px;margin-top:8px;display:none;">⚠️ 很抱歉，Voltix 现阶段仅支持室内及地下车库安装，暂不接受室外安装申请。</div>
+        </div>
+
+        <div class="form-group" style="margin-top:24px;">
+          <label>补充说明</label>
+          <textarea id="description" rows="4" placeholder="可补充说明场地情况、特殊需求等"></textarea>
+        </div>
+
+        <div id="formMsg" style="display:none;padding:14px 18px;border-radius:10px;margin-top:20px;font-size:14px;"></div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;padding:16px;font-size:16px;margin-top:32px;" id="submitBtn">
+          提交合作申请
+        </button>
+      </form>
+    </div>
+
+    <!-- 提交成功 -->
+    <div class="form-container" id="successBox" style="display:none;text-align:center;padding:60px 40px;">
+      <div style="font-size:64px;margin-bottom:20px;">✅</div>
+      <h2 style="font-size:24px;margin-bottom:12px;color:#059669;">申请提交成功！</h2>
+      <p style="color:#64748b;margin-bottom:32px;">我们将在 <strong>3 个工作日内</strong>审核您的申请，<br>审核结果将通过短信/邮件通知您。</p>
+      <a href="index.html" class="btn btn-primary" style="padding:14px 36px;">返回首页</a>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.svg" alt="Voltix" style="height:32px;width:auto;filter:drop-shadow(0 0 10px rgba(99,102,241,0.5));margin-bottom:12px;">
+          <p>极致电能，驱动未来</p>
+        </div>
+        <div class="footer-links">
+          <h4>快速链接</h4>
+          <a href="index.html">首页</a>
+          <a href="products.html">产品中心</a>
+          <a href="about.html">关于我们</a>
+          <a href="partnership.html">合作申请</a>
+          <a href="changelog.html">更新日志</a>
+        </div>
+        <div class="footer-contact">
+          <h4>联系我们</h4>
+          <p>📱 电话：132-2100-2280</p>
+          <p>📧 邮箱：liuxiaohui628@163.com</p>
+          <p>📍 地址：浙江省杭州市</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Voltix · 伏特前行. All rights reserved.</p>
+      </div>
+    </div>
+  <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:8px;">⚙ <a href="admin.html" target="_blank" style="color:#cbd5e1;text-decoration:none;">管理后台</a></p>
+    </footer>
+
+  <script src="nav-user.js?v=1.5.0"></script>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) { nav.classList.add('scrolled'); }
+      else { nav.classList.remove('scrolled'); }
+    });
+
+    function selectInstall(el, value) {
+      if (value === 'outdoor') return;
+      // 取消所有选中
+      document.querySelectorAll('[name="installType"]').forEach(r => r.checked = false);
+      document.querySelectorAll('.install-option').forEach(o => o.classList.remove('selected'));
+      // 选中当前
+      el.querySelector('input').checked = true;
+      el.classList.add('selected');
+      document.getElementById('installWarn').style.display = 'none';
+    }
+
+    function selectCompanyType(btn) {
+      document.querySelectorAll('.company-type-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('companyType').value = btn.dataset.value;
+    }
+
+    async function submitForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const installType = document.querySelector('[name="installType"]:checked');
+      if (!installType || installType.value === 'outdoor') {
+        document.getElementById('installWarn').style.display = 'block';
+        return;
+      }
+      const phone = document.getElementById('contactPhone').value;
+      if (!/^1[3-9]\d{9}$/.test(phone)) {
+        showMsg('请输入正确的手机号码', 'error');
+        return;
+      }
+      const data = {
+        companyName: document.getElementById('companyName').value,
+        companyType: document.getElementById('companyType').value,
+        contactPhone: phone,
+        siteArea: document.getElementById('siteArea').value,
+        pileCount: document.getElementById('pileCount').value,
+        installType: installType.value,
+        description: document.getElementById('description').value
+      };
+      btn.disabled = true;
+      btn.textContent = '提交中...';
+      try {
+        await submitApplication(data);
+        document.getElementById('formContainer').style.display = 'none';
+        document.getElementById('successBox').style.display = 'block';
+      } catch (err) {
+        showMsg(err.message || '提交失败，请重试', 'error');
+        btn.disabled = false;
+        btn.textContent = '提交申请';
+      }
+    }
+
+    function showMsg(msg, type) {
+      const el = document.getElementById('formMsg');
+      el.style.display = 'block';
+      el.style.background = type === 'error' ? '#fef2f2' : '#f0fdf4';
+      el.style.color = type === 'error' ? '#ef4444' : '#059669';
+      el.textContent = msg;
+    }
+  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+}
+</script>
+
+<script>
+// Voltix SW 更新提示 v1.4.1
+(function() {
+  let regRef = null;
+
+  function showUpdateToast() {
+    if (document.getElementById('sw-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'sw-update-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:12px 28px;border-radius:999px;z-index:99999;cursor:pointer;font-size:14px;font-weight:500;box-shadow:0 8px 30px rgba(16,185,129,0.4);letter-spacing:0.5px;';
+    toast.innerHTML = '🎉 发现新版本，点击刷新';
+    toast.onclick = () => {
+      if (regRef && regRef.waiting) {
+        regRef.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+      window.location.reload();
+    };
+    document.body.appendChild(toast);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        regRef = reg;
+
+        // 情况1：已有等待中的 SW（用户上次忽略了更新）
+        if (reg.waiting) {
+          showUpdateToast();
+          return;
+        }
+
+        // 情况2：检测到新 SW 正在安装
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+
+    // 情况3：SW 发来消息（NEW_VERSION_READY）
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'NEW_VERSION_READY') {
+        showUpdateToast();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
