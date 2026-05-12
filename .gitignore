@@ -1,0 +1,39 @@
+# ========== OS ==========
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ========== Editor ==========
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-*
+
+# ========== Dependencies ==========
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ========== CloudBase / Tencent Cloud ==========
+cloudbaserc.json         # 包含 envId，勿推送到公开仓库（如需请改名为 .local.cloudbaserc.json）
+.env
+.env.local
+.env.*.local
+
+# ========== Build outputs ==========
+dist/
+build/
+*.min.js
+*.min.css
+
+# ========== Logs ==========
+*.log
+logs/
+
+# ========== Misc ==========
+*.bak
+*.backup
